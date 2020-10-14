@@ -235,7 +235,7 @@ if Q5["choice"] == "No":
 if (
     Q5["choice"] == "Yes" and
     ["Applying lemon"] and ["Applying garlic water"]
-    in Q5["yes_choice"]):
+    in Q5["yes_choices"]):
 
     report_text += "Mauris viverra lobortis ante, eget faucibus felis" \
                    "pulvinar et. Suspendisse urna diam," \
@@ -252,7 +252,7 @@ if (
 if (
     Q5["choice"] == "Yes" and
     ["Applying Aloe liquid"] and ["Do not washing"]
-    in Q5["yes_choice"]):
+    in Q5["yes_choices"]):
 
     report_text += "Fusce sem est, maximus ac efficitur in, accumsan eu" \
                    "libero. Praesent facilisis, augue at pretium malesuada," \
@@ -269,3 +269,6 @@ else:
                    "(Any other case) Donec finibus nisl sapien, sed auctor" \
                    "elit sodales ac. Nulla dictum ante ante, eget maximus" \
                    "mi efficitur nec."
+
+
+print(report_text)
