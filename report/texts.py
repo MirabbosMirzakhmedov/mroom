@@ -1,4 +1,4 @@
-from report.questions import Question_4
+
 
 class Text:
     ANSWER_VERY_SHORT = "Lorem ipsum 1. Question - ANSWER_1 dolor sit amet," \
@@ -117,9 +117,9 @@ class Text:
            "qui officia deserunt mollit anim id est laborum."
 
 
-    def get_some_text(self, calculation_1):
+    def get_PRICE_first_MULTIPLY(self, calculation):
         return "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
-           f"Calories: {calculation_1}" \
+           f"Calories: {calculation}" \
            "Vivamus hendrerit arcu eros, nec bibendum mi" \
            "sodales id. Ut auctor nisl a placerat porttitor." \
            "Duis at tortor posuere, gravida sapien in," \
@@ -127,34 +127,34 @@ class Text:
            "justo vitae, varius nisi. Etiam in leo feugiat purus" \
            "facilisis tempor. Fusce congue metus non massa mollis," \
            "id imperdiet ex viverra." \
-           f"Cras Calories: {calculation_1}" \
+           f"Cras Calories: {calculation}" \
            "imperdiet lectus at imperdiet ornare."
 
-    def get_some_text_two(self, calculation_2):
+    def get_PRICE_second_MULTIPLY(self, calculation):
         return "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
                "Integer porta at odio ac rhoncus." \
-               f"Calories: {calculation_2}" \
+               f"Calories: {calculation}" \
                "nteger viverra porta eros nec ultrices." \
                "Nullam ante sem, tincidunt vitae orci id," \
                "vestibulum auctor risus. Phasellus sit amet" \
                "lobortis eros. Maecenas convallis dolor ex," \
                "vel congue ipsum ornare eu. Nunc in mattis dolor," \
                "quis posuere lorem." \
-               f"Calories: {calculation_2}" \
+               f"Calories: {calculation}" \
                "Nullam condimentum semper diam, lacinia tempor eros" \
                "tristique ut. Etiam ultrices imperdiet tortor at" \
                "eleifend. Aenean lorem felis, volutpat eu euismod at," \
                "congue id erat. Duis luctus quam vitae mattis tempus."
 
-    def get_some_text_three(self, calculation_3):
+    def get_PRICE_third_MULTIPLY(self, calculation):
         return "Sed at aliquam ex. Vestibulum maximus erat in justo" \
                "maximus posuere." \
-               f"Calories: {calculation_3}" \
+               f"Calories: {calculation}" \
                "Suspendisse tellus magna, faucibus scelerisque dapibus et," \
                "luctus egestas nibh. Pellentesque eleifend mauris ac" \
                "volutpat ullamcorper. Aenean vitae velit et nulla egestas" \
                "viverra sit amet eu eros." \
-               f"Calories: {calculation_3}" \
+               f"Calories: {calculation}" \
                "Nunc congue rutrum sem"
 
     ANSWER_IDK = "Phasellus ac sem ornare, ANSWER_I_DONT_KNOW euismod" \

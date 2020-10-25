@@ -1,9 +1,11 @@
-from typing import Dict
-from report.questions import \
-    Question_1, Question_2, Question_3, \
-    Question_4, Question_5
-
-
+from typing import Dict, List
+from report.questions import (
+    Question_1,
+    Question_2,
+    Question_3,
+    Question_4,
+    Question_5
+)
 
 class Report:
     def __init__(self, questions: List):
