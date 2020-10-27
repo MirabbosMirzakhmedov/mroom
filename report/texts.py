@@ -117,7 +117,7 @@ class Text:
            "qui officia deserunt mollit anim id est laborum."
 
 
-    def get_PRICE_first_MULTIPLY(self, calculation):
+    def get_price_higher_than_120_or_265(self, calculation):
         return "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
            f"Calories: {calculation}" \
            "Vivamus hendrerit arcu eros, nec bibendum mi" \
@@ -130,7 +130,7 @@ class Text:
            f"Cras Calories: {calculation}" \
            "imperdiet lectus at imperdiet ornare."
 
-    def get_PRICE_second_MULTIPLY(self, calculation):
+    def get_price_lower_than_60_or_132(self, calculation):
         return "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
                "Integer porta at odio ac rhoncus." \
                f"Calories: {calculation}" \
@@ -146,7 +146,7 @@ class Text:
                "eleifend. Aenean lorem felis, volutpat eu euismod at," \
                "congue id erat. Duis luctus quam vitae mattis tempus."
 
-    def get_PRICE_third_MULTIPLY(self, calculation):
+    def get_price_any_other_case(self, calculation):
         return "Sed at aliquam ex. Vestibulum maximus erat in justo" \
                "maximus posuere." \
                f"Calories: {calculation}" \
@@ -205,12 +205,3 @@ class Text:
        "(Any other case) Donec finibus nisl sapien, sed auctor" \
        "elit sodales ac. Nulla dictum ante ante, eget maximus" \
        "mi efficitur nec."
-
-
-
-
-
-
-
-
-

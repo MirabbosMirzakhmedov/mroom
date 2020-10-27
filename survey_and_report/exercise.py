@@ -1,11 +1,8 @@
-# TODO: 1. Move if statements to classes
-# TODO: 2. Create Report class which takes List of Question objects
-# TODO: 3. Deifne one method called ".get()" in Report class which would combine all the results from Question objects into a one string
 
-from typing import Dict, List
+from typing import Dict
 from report.questions import Question_1, Question_2, Question_3, Question_4, Question_5
 
-# Survey answers submitted by User
+
 questions_answers: Dict = {
     'Q1_answer': "Very short",
     'Q2_answer': "Everyday",
@@ -336,32 +333,3 @@ question_5 = Question_5(
     answer_choice=questions_answers["Q5_answer"]["choice"],
     answer_yes_choices=questions_answers["Q5_answer"]["yes_choices"]
 )
-
-# class Report:
-#     def __init__(self, questions: List):
-#         self.questions = questions
-#
-#     def get(self):
-#         text: str = ""
-#         for question in self.questions:
-#             text += question.get_answer()
-#         return text
-#
-# report = Report(
-#     questions=[
-#         Question_1(questions_answers["Q1_answer"]),
-#         Question_2(questions_answers["Q2_answer"]),
-#         Question_3(questions_answers["Q3_answer"]),
-#         Question_4(answer_cur="Eur", answer_pr=120),
-#         Question_5(
-#             answer_choice="Yes",
-#             answer_yes_choices=["Applying Aloe liquid",
-#                                 "Applying lemon",
-#                                 "Applying garlic water",
-#                                 "Do not washing"]
-#         )
-#     ]
-# )
-
-
-
