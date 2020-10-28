@@ -1,9 +1,11 @@
 from typing import Dict
 
+
 class Survey:
 
     def __init__(self, answers):
         self.answers = answers
+
 
 questions_answers: Dict = {
     'Q1_answer': "Very short",

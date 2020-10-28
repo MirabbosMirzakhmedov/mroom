@@ -1,7 +1,6 @@
 from survey.base import Survey
-from report.questions import (
-    Question
-)
+from report.questions import (Question)
+
 
 class Report:
     def __init__(self, survey: Survey):
@@ -30,8 +29,9 @@ class Report:
     def get(self):
         text: str = ""
         for answer_text in self.get_question_answers():
-            text += answer_text.get_answer()
+            text += answer_text
         return text
+
 
 survey = Survey(
     answers={
@@ -54,3 +54,5 @@ survey = Survey(
 
 report = Report(survey=survey)
 report_text: str = report.get()
+
+print(report_text)
