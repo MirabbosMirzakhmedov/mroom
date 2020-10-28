@@ -2,7 +2,7 @@ from report.texts import Text
 from typing import (
     List,
     Dict,
-    Union
+    Union,
 )
 
 
@@ -42,23 +42,13 @@ class Question:
     def __init__(
             self,
             answer: Union[str, Dict, List],
-            answer_choice: str = None,
-            answer_yes_choices: List = None,
-            currency: str = None,
-            price: int = None,
     ):
         self.answer = answer
         self.text = Text()
-        self.answer_choice = answer_choice
-        self.answer_yes_choices = answer_yes_choices
-        self.currency = currency
-        self.price = price
 
         if isinstance(self.answer, Dict):
             self.currency = self.answer.get('currency')
             self.price = self.answer.get('price')
-
-        if isinstance(self.answer, Dict):
             self.answer_choice = self.answer.get('choice')
             self.answer_yes_choices = self.answer.get("yes_choices")
 

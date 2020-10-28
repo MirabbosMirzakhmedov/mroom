@@ -1,12 +1,12 @@
 from survey.base import Survey
-from report.questions import (Question)
-
+from report.questions import Question
+from typing import List
 
 class Report:
     def __init__(self, survey: Survey):
         self.survey = survey
 
-    def get_question_answers(self):
+    def get_question_answers(self) -> List:
         return [
             Question(
                 self.survey.answers["Q1_answer"]
@@ -26,7 +26,7 @@ class Report:
 
         ]
 
-    def get(self):
+    def get(self) -> str:
         text: str = ""
         for answer_text in self.get_question_answers():
             text += answer_text
