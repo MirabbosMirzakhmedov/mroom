@@ -1,20 +1,21 @@
 import unittest
 
-from mroom.report.questions import Question
-from mroom.report.tests.test_data.question_texts import TestTest
+from report.questions import Question
+from report.tests.test_data.question_texts import TestTest
 
 
-class Test_Question_1(unittest.TestCase):
+class TestQuestionOne(unittest.TestCase):
 
-    def test_question_1_very_short(self):
+    def test_answer_1(self):
         actual_result: str = Question(
-            'Very short'
+            "Very short"
         ).get_how_long_hair_do_you_have_answer()
+
         expected_result: str = TestTest.ANSWER_VERY_SHORT
 
         self.assertEqual(actual_result, expected_result)
 
-    def test_question_2_short(self):
+    def test_answer_2(self):
         actual_result: str = Question(
             "Short"
         ).get_how_long_hair_do_you_have_answer()
@@ -23,7 +24,7 @@ class Test_Question_1(unittest.TestCase):
 
         self.assertEqual(actual_result, expected_result)
 
-    def test_question_3_medium(self):
+    def test_answer_3(self):
         actual_result: str = Question(
             "Medium"
         ).get_how_long_hair_do_you_have_answer()
@@ -32,7 +33,7 @@ class Test_Question_1(unittest.TestCase):
 
         self.assertEqual(actual_result, expected_result)
 
-    def test_question_4_Long(self):
+    def test_answer_4(self):
         actual_result: str = Question(
             "Long"
         ).get_how_long_hair_do_you_have_answer()

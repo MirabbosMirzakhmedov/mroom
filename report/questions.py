@@ -4,7 +4,7 @@ from typing import (
     Union,
 )
 
-from mroom.report.texts import Text
+from report.texts import Text
 
 
 class Answers:
@@ -116,7 +116,6 @@ class Question:
 
     # FOURTH QUESTION
     def get_whats_the_price_for_your_shampoo_answer(self):
-
         if (
                 self.price > Answers.price_120 and
                 self.currency == Answers.EUR or
