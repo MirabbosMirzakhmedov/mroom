@@ -1,9 +1,10 @@
-from report.texts import Text
 from typing import (
     List,
     Dict,
     Union,
 )
+
+from mroom.report.texts import Text
 
 
 class Answers:
@@ -52,6 +53,7 @@ class Question:
             self.answer_choice = self.answer.get('choice')
             self.answer_yes_choices = self.answer.get("yes_choices")
 
+    # FIRST QUESTION
     def get_how_long_hair_do_you_have_answer(self):
         if (
                 self.answer == Answers.VERY_SHORT
@@ -73,6 +75,7 @@ class Question:
         ):
             return self.text.ANSWER_LONG
 
+    # SECOND QUESTION
     def get_how_often_do_you_wash_your_hair_answer(self):
         if (
                 self.answer == Answers.EVERYDAY or
@@ -86,6 +89,7 @@ class Question:
         ):
             return self.text.ANSWER_1_TIME_AND_ANSWER_3_TIMES
 
+    # THIRD QUESTION
     def get_what_kind_of_problems_do_you_have_answer(self):
         if (
                 Answers.PSORIASIS in self.answer and
@@ -110,6 +114,7 @@ class Question:
         else:
             return self.text.QUESTION_3_ANSWER_3_else
 
+    # FOURTH QUESTION
     def get_whats_the_price_for_your_shampoo_answer(self):
 
         if (
@@ -137,6 +142,7 @@ class Question:
                 calculation=round(self.price * 1.3 * 15.2)
             )
 
+    # FIFTH QUESTION
     def get_solutions_you_can_do_at_home_answer(self):
         if (
                 self.answer_choice == Answers.IDK

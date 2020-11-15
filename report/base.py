@@ -1,6 +1,8 @@
-from survey.base import Survey
-from report.questions import Question
 from typing import List
+
+from mroom.report.questions import Question
+from mroom.survey.base import Survey
+
 
 class Report:
     def __init__(self, survey: Survey):
