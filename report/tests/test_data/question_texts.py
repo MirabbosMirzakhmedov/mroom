@@ -1,5 +1,5 @@
-class TestTest:
-    # QUESTION 1 STARTS HERE
+class TestTexts:
+    # QUESTION ONE
     ANSWER_VERY_SHORT = \
         "Lorem ipsum 1. Question - ANSWER_1 dolor sit amet," \
         "consectetur adipiscing elit. Mauris sed ligula vitae tellus" \
@@ -44,9 +44,8 @@ class TestTest:
         "or ANSWER_5 or ANSWER_6 vitae venenatis sapien. Nullam" \
         "auctor odio vehicula, posuere elit in, ullamcorper lectus." \
         "Mauris pharetra dapibus congue. Suspendisse potenti."
-    # QUESTION 1 ENDS HERE
 
-    # QUESTION 2 STARTS HERE
+    # QUESTION 2
     ANSWER_EVERDAY_AND_ANSWER_2_TIMES = \
         "Mauris urna nunc, eleifend id" \
         "2. Question - ANSWER_1 or ANSWER_3 tincidunt venenatis" \
@@ -70,9 +69,7 @@ class TestTest:
         "2. Question - ANSWER_2 or ANSWER_4 ligula interdum a." \
         "Praesent quis libero arcu. Donec felis libero," \
         "tristique et sapien non, feugiat eleifend diam."
-    # QUESTION 2 ENDS HERE
 
-    # QUESTION 3 STARTS HERE
     QUESTION_3_ANSWER_1 = \
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " \
         "Sed sollicitudin leo in 3. Question - ANSWER_4, ANSWER_3" \
@@ -124,69 +121,98 @@ class TestTest:
         "cillum dolore eu fugiat nulla pariatur. Excepteur" \
         "sint occaecat cupidatat non proident, sunt in culpa" \
         "qui officia deserunt mollit anim id est laborum."
-# QUESTION 3 ENDS HERE
 
-# QUESTION 4 STARTS HERE
-    def get_price_higher_than_120_or_265(self, calculation):
-        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
-               f"Calories: {calculation}" \
-               "Vivamus hendrerit arcu eros, nec bibendum mi" \
-               "sodales id. Ut auctor nisl a placerat porttitor." \
-               "Duis at tortor posuere, gravida sapien in," \
-               "fermentum ligula. Quisque eu ipsum lobortis, hendrerit" \
-               "justo vitae, varius nisi. Etiam in leo feugiat purus" \
-               "facilisis tempor. Fusce congue metus non massa mollis," \
-               "id imperdiet ex viverra." \
-               f"Cras Calories: {calculation}" \
-               "imperdiet lectus at imperdiet ornare."
+    # QUESTION 4
+    QUESTION_4_HIGHER_THAN_120_EUR = \
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
+        "Price: 157" \
+        "Vivamus hendrerit arcu eros, nec bibendum mi" \
+        "sodales id. Ut auctor nisl a placerat porttitor." \
+        "Duis at tortor posuere, gravida sapien in," \
+        "fermentum ligula. Quisque eu ipsum lobortis, hendrerit" \
+        "justo vitae, varius nisi. Etiam in leo feugiat purus" \
+        "facilisis tempor. Fusce congue metus non massa mollis," \
+        "id imperdiet ex viverra." \
+        "Cras Price: 157" \
+        "imperdiet lectus at imperdiet ornare."
 
-    def get_price_lower_than_60_or_132(self, calculation):
-        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
-               "Integer porta at odio ac rhoncus." \
-               f"Calories: {calculation}" \
-               "nteger viverra porta eros nec ultrices." \
-               "Nullam ante sem, tincidunt vitae orci id," \
-               "vestibulum auctor risus. Phasellus sit amet" \
-               "lobortis eros. Maecenas convallis dolor ex," \
-               "vel congue ipsum ornare eu. Nunc in mattis dolor," \
-               "quis posuere lorem." \
-               f"Calories: {calculation}" \
-               "Nullam condimentum semper diam, lacinia tempor eros" \
-               "tristique ut. Etiam ultrices imperdiet tortor at" \
-               "eleifend. Aenean lorem felis, volutpat eu euismod at," \
-               "congue id erat. Duis luctus quam vitae mattis tempus."
+    QUESTION_4_HIGHER_THAN_265_USD = \
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
+        "Price: 346" \
+        "Vivamus hendrerit arcu eros, nec bibendum mi" \
+        "sodales id. Ut auctor nisl a placerat porttitor." \
+        "Duis at tortor posuere, gravida sapien in," \
+        "fermentum ligula. Quisque eu ipsum lobortis, hendrerit" \
+        "justo vitae, varius nisi. Etiam in leo feugiat purus" \
+        "facilisis tempor. Fusce congue metus non massa mollis," \
+        "id imperdiet ex viverra." \
+        "Cras Price: 346" \
+        "imperdiet lectus at imperdiet ornare."
 
-    def get_price_any_other_case(self, calculation):
-        return "Sed at aliquam ex. Vestibulum maximus erat in justo" \
-               "maximus posuere." \
-               f"Calories: {calculation}" \
-               "Suspendisse tellus magna, faucibus scelerisque dapibus et," \
-               "luctus egestas nibh. Pellentesque eleifend mauris ac" \
-               "volutpat ullamcorper. Aenean vitae velit et nulla egestas" \
-               "viverra sit amet eu eros." \
-               f"Calories: {calculation}" \
-               "Nunc congue rutrum sem"
-# QUESTION 4 ENDS HERE
+    QUESTION_4_LOWER_THAN_60_EUR = \
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
+        "Integer porta at odio ac rhoncus." \
+        "Price: 84" \
+        "nteger viverra porta eros nec ultrices." \
+        "Nullam ante sem, tincidunt vitae orci id," \
+        "vestibulum auctor risus. Phasellus sit amet" \
+        "lobortis eros. Maecenas convallis dolor ex," \
+        "vel congue ipsum ornare eu. Nunc in mattis dolor," \
+        "quis posuere lorem." \
+        "Price: 84" \
+        "Nullam condimentum semper diam, lacinia tempor eros" \
+        "tristique ut. Etiam ultrices imperdiet tortor at" \
+        "eleifend. Aenean lorem felis, volutpat eu euismod at," \
+        "congue id erat. Duis luctus quam vitae mattis tempus."
 
-# QUESTION 5 STARTS HERE
-    ANSWER_IDK = "Phasellus ac sem ornare, ANSWER_I_DONT_KNOW euismod" \
-                 "tellus id, sagittis felis. Nullam viverra est nibh," \
-                 "et dignissim elit tincidunt nec. Integer vel dolor" \
-                 "aliquam, eleifend metus in, tincidunt erat. Nam id" \
-                 "facilisis tortor. Donec malesuada, libero nec tincidunt" \
-                 "ANSWER_I_DONT_KNOW commodo, nulla velit imperdiet" \
-                 "mauris, sit amet cursus dui quam maximus justo." \
-                 "In accumsan nisi ut orci finibus ullamcorper. Aliquam" \
-                 "consequat risus non orci dapibus, id commodo erat egestas."
+    QUESTION_4_LOWER_THAN_132_USD = \
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
+        "Integer porta at odio ac rhoncus." \
+        "Price: 187" \
+        "nteger viverra porta eros nec ultrices." \
+        "Nullam ante sem, tincidunt vitae orci id," \
+        "vestibulum auctor risus. Phasellus sit amet" \
+        "lobortis eros. Maecenas convallis dolor ex," \
+        "vel congue ipsum ornare eu. Nunc in mattis dolor," \
+        "quis posuere lorem." \
+        "Price: 187" \
+        "Nullam condimentum semper diam, lacinia tempor eros" \
+        "tristique ut. Etiam ultrices imperdiet tortor at" \
+        "eleifend. Aenean lorem felis, volutpat eu euismod at," \
+        "congue id erat. Duis luctus quam vitae mattis tempus."
 
-    ANSWER_NO = "Nam maximus et massa laoreet congue. In facilisis egestas" \
-                "neque. Nullam ac euismod nibh. ANSWER_NO Aenean pulvinar" \
-                "lacinia ligula, nec lobortis magna accumsan sed. Duis" \
-                "tempor pellentesque quam. ANSWER_NO Sed non est dui." \
-                "Sed commodo odio vel augue pellentesque, et sagittis" \
-                "dolor tristique. Phasellus mollis magna eu egestas" \
-                "viverra. Cras elementum erat vel libero venenatis," \
-                "ut suscipit nibh scelerisque."
+    QUESTION_4_ANY_OTHER_CASE = \
+        "Sed at aliquam ex. Vestibulum maximus erat in justo" \
+        "maximus posuere." \
+        "Price: 1976" \
+        "Suspendisse tellus magna, faucibus scelerisque dapibus et," \
+        "luctus egestas nibh. Pellentesque eleifend mauris ac" \
+        "volutpat ullamcorper. Aenean vitae velit et nulla egestas" \
+        "viverra sit amet eu eros." \
+        "Price: 1976" \
+        "Nunc congue rutrum sem"
+
+    # QUESTION 5
+    ANSWER_IDK = \
+        "Phasellus ac sem ornare, ANSWER_I_DONT_KNOW euismod" \
+        "tellus id, sagittis felis. Nullam viverra est nibh," \
+        "et dignissim elit tincidunt nec. Integer vel dolor" \
+        "aliquam, eleifend metus in, tincidunt erat. Nam id" \
+        "facilisis tortor. Donec malesuada, libero nec tincidunt" \
+        "ANSWER_I_DONT_KNOW commodo, nulla velit imperdiet" \
+        "mauris, sit amet cursus dui quam maximus justo." \
+        "In accumsan nisi ut orci finibus ullamcorper. Aliquam" \
+        "consequat risus non orci dapibus, id commodo erat egestas."
+
+    ANSWER_NO = \
+        "Nam maximus et massa laoreet congue. In facilisis egestas" \
+        "neque. Nullam ac euismod nibh. ANSWER_NO Aenean pulvinar" \
+        "lacinia ligula, nec lobortis magna accumsan sed. Duis" \
+        "tempor pellentesque quam. ANSWER_NO Sed non est dui." \
+        "Sed commodo odio vel augue pellentesque, et sagittis" \
+        "dolor tristique. Phasellus mollis magna eu egestas" \
+        "viverra. Cras elementum erat vel libero venenatis," \
+        "ut suscipit nibh scelerisque."
 
     ANSWER_YES_lemon_garlicwater = \
         "Mauris viverra lobortis ante, eget faucibus felis" \
