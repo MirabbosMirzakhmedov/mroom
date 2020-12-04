@@ -20,11 +20,25 @@ response: requests.models.Response = requests.get(
             "amazon-products1.p.rapidapi.com"
     },
     params={
-        "country":"US","query":"MacBook+Pro"
+        "country":"US","query":"Dandruff"
     }
 )
 
-# print(response.text)
+data_product = response.json()
+
+# print(data)
+# print(response.json()["results"][0].get('title'))
+# print(response.json()["results"][0].get('image'))
+# print(response.json()["results"][0].get('full_link'))
+# print(response.json()["results"][0].get('prices'))
+
+# "Dandruff" - 60
+# "Hair loss" - 60
+# "Dry hair" - 48
+# "Psoriasis" - 60
+# "Head lice" - 60
+# "Bamboo hair" - 60
+# "Very oily hair" - 48
 
 #TODO: Exercise 2: Create a 'ProductRequest' class
 # 1. Create a new 'ProductRequest' class blueprint
@@ -34,6 +48,13 @@ response: requests.models.Response = requests.get(
 #TODO: Exercise 3: Move parts that don't change to the __init__
 # 1. Create a new 'self.url' variable in '__init__' method (and use it in code)
 # 2. Create a new 'self.headers' variable in '__init__' method (and use it in code)
+
+#TODO: Exercise 4: Add 'timeout' (in case we can't reach the API url)
+# 1. Create a separate method called '.get()' in 'ProductRequest' class
+# 2. Adjust '_request' method to use 'getattr()' and '**kwargs' (see the video)
+# 3. Add new variable called 'self.timeout' to __init__ method (see the video)
+# 4. Update 'kwargs' with 'self.timeout' in '_request' method (see the video)
+# 5. Adjust '.get()' method to use '_request' method (see the video)
 
 from typing import Dict
 
@@ -66,18 +87,77 @@ class ProductRequest:
 
 data: Dict = {
     'country': 'US',
-    'query': 'MacBook+Pro'
+    'query': 'Hair+product'
 }
 
-requests = ProductRequest()
-res: requests.Response = requests.get(params=data)
+request = ProductRequest()
+res: requests.Response = requests.get(
+    params=data,
+    url='https://amazon-products1.p.rapidapi.com/search'
+)
+from typing import List
+# print(res.json())
 
-print(res)
+#TODO: Exercise 5: Data extraction for the first product
+# 1. Use 'ProductRequest' to create a new request
+# 2. Assign the result of .get() method execution to a new variable called 'res'
+# 3. Create a new variable 'res_data: Dict = res.json()'
+# 4. Get the first product from the 'results' key in 'res_data'
+#    and assign it to a new variable called 'product'
+# 5. Find out how to access product fields:
+#    'title', 'image', 'full_link', 'current_price', 'currency'
+#    using 'product' variable
+# 6. Create a new empty 'List' variable called 'products'
+# 7. Append a new item
+#    (Dict with product 'title', 'image', 'full_link', 'current_price', 'currency')
+#    to 'products'
+
+res_file: requests.Response = request.get(params=data)
+res_data: Dict = res.json()
 
 
-#TODO: Exercise 4: Add 'timeout' (in case we can't reach the API url)
-# 1. Create a separate method called '.get()' in 'ProductRequest' class
-# 2. Adjust '_request' method to use 'getattr()' and '**kwargs' (see the video)
-# 3. Add new variable called 'self.timeout' to __init__ method (see the video)
-# 4. Update 'kwargs' with 'self.timeout' in '_request' method (see the video)
-# 5. Adjust '.get()' method to use '_request' method (see the video)
+# product: str = res_file.json()['results'][0].get('title')
+# image: str = res_file.json()['results'][0].get('image')
+# full_link: str = res_file.json()['results'][0].get('full_link')
+# current_price: Dict = res_file.json()['results'][0].get('current_price')
+# currency: Dict = res_file.json()['results'][0].get('currency')
+
+
+# print(res_file.json()['results'][0].get('title'))
+# print(res_file.json()['results'][0].get('image'))
+# print(res_file.json()['results'][0].get('full_link'))
+# print(res_file.json()['results'][0].get('current_price'))
+# print(res_file.json()['results'][0].get('currency'))
+
+products: List = []
+
+# products.append(
+#     [
+#         product,
+#         image,
+#         full_link,
+#         current_price,
+#         currency,
+#     ]
+# )
+
+# print(products)
+
+
+#TODO: Exercise 6: Create 'get_products' function
+# 1. Create a new function called 'get_products'
+# 2. 'get_products' function takes 1 argument 'res_data'
+# 3. The goal of the function is to return a list of 5 products
+# 4. Each product should be appended to the 'products' list
+#    as a Dict with with product 'title', 'image', 'full_link', 'current_price', 'currency'
+# 5. Use 'for loop' to with 'break' statement to end the 'for loop' once you have collected 5 products
+# 6. Use if statement to only add products with current_price higher than -1.0 (float)
+# 7. The function should return a list of products (add a return type to the function)
+
+def get_products(res_data):
+
+    products: List = []
+
+    for res_file.json()['results'] in res_data:
+        return products.append(x)
+
