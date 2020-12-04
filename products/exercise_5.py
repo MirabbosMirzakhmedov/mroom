@@ -43,38 +43,45 @@ class ProductRequest:
         )
 data: Dict = {
     'country': 'US',
-    'query': 'Hair+product'
+    'query': 'Dandruff'
 }
 
-res: requests.Response = requests.get(
-    params=data,
-    url='https://amazon-products1.p.rapidapi.com/search'
+request = ProductRequest()
+res: requests.Response = request.get(
+    params=data
 )
-
 res_data: Dict = res.json()
 
+# print(res_data)
 
-print(res.json())
-
-# product: str = res.json()['results'][0].get('title')
-# image: str = res.json()['results'][0].get('image')
-# full_link: str = res.json()['results'][0].get('full_link')
-# current_price: Dict = res.json()['results'][0].get('current_price')
-# currency: Dict = res.json()['results'][0].get('currency')
-#
-# products: List = []
-
-
-
-# products.append(
-#     product, image, full_link, current_price, currency,
-# )
+product: str = res.json()['results'][0].get('title')
+image: str = res.json()['results'][0].get('image')
+full_link: str = res.json()['results'][0].get('full_link')
+current_price: Dict = res.json()['results'][0]['prices']['current_price']
+currency: int = res.json()['results'][0]['prices']['currency']
 
 # print(res.json()['results'][0].get('title'))
 # print(res.json()['results'][0].get('image'))
 # print(res.json()['results'][0].get('full_link'))
-# print(res.json()['results'][0].get('current_price'))
-# print(res.json()['results'][0].get('currency'))
+# print(res.json()['results'][0]['prices']['current_price'])
+# print(res.json()['results'][0]['prices']['currency'])
+
+products: List = []
+
+products.append(
+    {
+        'product': product,
+        'image': image,
+        'full_link': full_link,
+        'current_price': current_price,
+        'currency': currency,
+    }
+)
+
+print(products[0]['current_price'])
+# TILL HERE ITS READY
+print(products[0])
+
 
 
 
