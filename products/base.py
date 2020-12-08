@@ -41,21 +41,22 @@
 
 
 
-from typing import Dict, List
-import requests
+from typing import Dict, List, Union
+import requests, json
 
+# Response -
 
 class ProductRequest:
 
     def __init__(self):
-        self.url = "https://amazon-products1.p.rapidapi.com/search"
-        self.headers = {
+        self.url: str = "https://amazon-products1.p.rapidapi.com/search"
+        self.headers: Dict = {
             'x-rapidapi-key':
                 "a8f0a072d2msh3d1bfc104318241p1aec10jsn70718bbf81a2",
             'x-rapidapi-host':
                 "amazon-products1.p.rapidapi.com"
         }
-        self.timeout = 20
+        self.timeout: int = 20
 
     def _request(self, method: str, **kwargs) -> requests.Response:
         kwargs.update({
@@ -70,10 +71,15 @@ class ProductRequest:
             headers=self.headers,
             params=params,
         )
+
+#  what kind of data i want to get back
 data: Dict = {
     'country': 'US',
     'query': 'Dandruff'
 }
+#  1 - create a query data
+#  2 - Making the request in another variable
+#  3 - getting the json from the response
 
 request = ProductRequest()
 res: requests.Response = request.get(
@@ -81,14 +87,14 @@ res: requests.Response = request.get(
 )
 res_data: Dict = res.json()
 
-# print(res_data)
 
-product: str = res.json()['results'][0].get('title')
-image: str = res.json()['results'][0].get('image')
-full_link: str = res.json()['results'][0].get('full_link')
-current_price: Dict = res.json()['results'][0]['prices']['current_price']
-currency: int = res.json()['results'][0]['prices']['currency']
 
+# title: str = res.json()['results'][0].get('title')
+# image: str = res.json()['results'][0].get('image')
+# full_link: str = res.json()['results'][0].get('full_link')
+# current_price: Dict = res.json()['results'][0]['prices']['current_price']
+# currency: int = res.json()['results'][0]['prices']['currency']
+#
 # print(res.json()['results'][0].get('title'))
 # print(res.json()['results'][0].get('image'))
 # print(res.json()['results'][0].get('full_link'))
@@ -97,15 +103,15 @@ currency: int = res.json()['results'][0]['prices']['currency']
 
 products: List = []
 
-products.append(
-    {
-        'product': product,
-        'image': image,
-        'full_link': full_link,
-        'current_price': current_price,
-        'currency': currency,
-    }
-)
+# products.append(
+#     {
+#         'product': product,
+#         'image': image,
+#         'full_link': full_link,
+#         'current_price': current_price,
+#         'currency': currency,
+#     }
+# )
 
 #TODO: Exercise 6: Create 'get_products' function
 # 1. Create a new function called 'get_products'
@@ -118,17 +124,108 @@ products.append(
 # 6. Use if statement to only add products with current_price higher than -1.0 (float)
 # 7. The function should return a list of products (add a return type to the function)import requests
 
-def get_products(res_data) -> List:
+def get_products(res_data: Dict) -> List:
 
     products: List = []
 
     for product in res_data['results']:
 
-        if product['results'][0]['prices']['current_price'] > -1.0:
-            products.append(product)
+        if product['prices']['current_price'] > -1.0:
+            products.append(
+                {
+                    'title': product['title'],
+                    'image': product['image'],
+                    'full_link': product['full_link'],
+                    'current_price': product['prices']['current_price'],
+                    'currency': product['prices']['currency'],
+                }
+            )
 
-            return product
+        if len(products) == 5:
+            break
 
-print(get_products(res.json()))
+    return products
 
-# print(res.json()['results'])
+five_products: List = get_products(res_data)
+
+# for five in five_products:
+#     print(five)
+
+#TODO: Exercise 7: Create 'Products' class
+# 1. Move 'get_products()' function to the 'Products' class
+# 2. Rename 'get_products()' function to just 'get()' method
+# 3. Create __init__ method with two arguments:
+#    'res_data' and 'amount'
+# 4. Create two variables in __init__ method:
+#    'self.data' (for 'res_data') and 'self.amount' for 'amount'
+# 5. Use 'self.data' and  'self.amount' in 'get()' method
+
+class Products:
+
+    def __init__(self, res_data: Dict, amount: int):
+        self.data = res_data
+        self.amount = amount
+
+
+    def get(self) -> List:
+
+        products: List = []
+
+        for product in self.data['results']:
+
+            if product['prices']['current_price'] > -1.0:
+                products.append(
+                    {
+                        'title': product['title'],
+                        'image': product['image'],
+                        'full_link': product['full_link'],
+                        'current_price': product['prices']['current_price'],
+                        'currency': product['prices']['currency'],
+                    }
+                )
+
+            if len(products) == self.amount:
+                break
+
+        return products
+
+ready_products = Products(res_data=res_data, amount=5).get()
+
+#TODO: Exercise 8: Write a list of products text to a file
+# 1. Learn how to create text files with Python using the simple example below
+# 2. Adjust simple example code to create your own products.txt file
+# 3. Make sure products.txt file content corresponds to the example below
+
+# Simple example to write a text to a file:
+
+
+
+with open(
+        'D:\Python Mentorship\module_5\project_exercise\products_list.txt',
+        'w'
+) as f:
+    for a in ready_products:
+        f.write(f'{a}')
+
+    f.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
