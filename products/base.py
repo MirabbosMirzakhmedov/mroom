@@ -205,7 +205,7 @@ with open(
         'w'
 ) as f:
     for a in ready_products:
-        f.write(f'{a}')
+        f.write(f'{a}\n')
 
     f.close()
 
