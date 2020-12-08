@@ -1,4 +1,4 @@
-#TODO: Exercise 1: A proper request following all the previous instructions
+# TODO: Exercise 1: A proper request following all the previous instructions
 # 1. Add variable type to the 'response'
 # 2. Instead of using separate 'url' variable,
 #    move 'https://amazon-products1.p.rapidapi.com/search' in .get(url=...)
@@ -9,12 +9,12 @@
 # 5. Choose one either single or double quotes,
 #    and stick with them - replace all of them with one type.
 
-#TODO: Exercise 2: Create a 'ProductRequest' class
+# TODO: Exercise 2: Create a 'ProductRequest' class
 # 1. Create a new 'ProductRequest' class blueprint
 # 2. Create a new method called 'def _request(self) -> requests.Response:'
 # 3. Move the content of 'Exercise 1' to the new '_request' method (return the response)
 
-#TODO: Exercise 3: Move parts that don't change to the __init__
+# TODO: Exercise 3: Move parts that don't change to the __init__
 # 1. Create a new 'self.url' variable in '__init__' method (and use it in code)
 # 2. Create a new 'self.headers' variable in '__init__' method (and use it in code)
 
@@ -25,7 +25,7 @@
 #  4. Update 'kwargs' with 'self.timeout' in '_request' method (see the video)
 #  5. Adjust '.get()' method to use '_request' method (see the video)
 
-#TODO: Exercise 5: Data extraction for the first product
+# TODO: Exercise 5: Data extraction for the first product
 # 1. Use 'ProductRequest' to create a new request
 # 2. Assign the result of .get() method execution to a new variable called 'res'
 # 3. Create a new variable 'res_data: Dict = res.json()'
@@ -40,11 +40,9 @@
 #    to 'products'
 
 
+from typing import Dict, List
+import requests
 
-from typing import Dict, List, Union
-import requests, json
-
-# Response -
 
 class ProductRequest:
 
@@ -72,6 +70,7 @@ class ProductRequest:
             params=params,
         )
 
+
 #  what kind of data i want to get back
 data: Dict = {
     'country': 'US',
@@ -87,33 +86,32 @@ res: requests.Response = request.get(
 )
 res_data: Dict = res.json()
 
+title: str = res.json()['results'][0].get('title')
+image: str = res.json()['results'][0].get('image')
+full_link: str = res.json()['results'][0].get('full_link')
+current_price: Dict = res.json()['results'][0]['prices']['current_price']
+currency: int = res.json()['results'][0]['prices']['currency']
 
-
-# title: str = res.json()['results'][0].get('title')
-# image: str = res.json()['results'][0].get('image')
-# full_link: str = res.json()['results'][0].get('full_link')
-# current_price: Dict = res.json()['results'][0]['prices']['current_price']
-# currency: int = res.json()['results'][0]['prices']['currency']
-#
-# print(res.json()['results'][0].get('title'))
-# print(res.json()['results'][0].get('image'))
-# print(res.json()['results'][0].get('full_link'))
-# print(res.json()['results'][0]['prices']['current_price'])
-# print(res.json()['results'][0]['prices']['currency'])
+print(res.json()['results'][0].get('title'))
+print(res.json()['results'][0].get('image'))
+print(res.json()['results'][0].get('full_link'))
+print(res.json()['results'][0]['prices']['current_price'])
+print(res.json()['results'][0]['prices']['currency'])
 
 products: List = []
 
-# products.append(
-#     {
-#         'product': product,
-#         'image': image,
-#         'full_link': full_link,
-#         'current_price': current_price,
-#         'currency': currency,
-#     }
-# )
 
-#TODO: Exercise 6: Create 'get_products' function
+products.append(
+    {
+        'product': title,
+        'image': image,
+        'full_link': full_link,
+        'current_price': current_price,
+        'currency': currency,
+    }
+)
+
+# TODO: Exercise 6: Create 'get_products' function
 # 1. Create a new function called 'get_products'
 # 2. 'get_products' function takes 1 argument 'res_data'
 # 3. The goal of the function is to return a list of 5 products
@@ -125,7 +123,6 @@ products: List = []
 # 7. The function should return a list of products (add a return type to the function)import requests
 
 def get_products(res_data: Dict) -> List:
-
     products: List = []
 
     for product in res_data['results']:
@@ -146,12 +143,14 @@ def get_products(res_data: Dict) -> List:
 
     return products
 
+
 five_products: List = get_products(res_data)
 
-# for five in five_products:
-#     print(five)
+for five in five_products:
+    print(five)
 
-#TODO: Exercise 7: Create 'Products' class
+
+# TODO: Exercise 7: Create 'Products' class
 # 1. Move 'get_products()' function to the 'Products' class
 # 2. Rename 'get_products()' function to just 'get()' method
 # 3. Create __init__ method with two arguments:
@@ -165,7 +164,6 @@ class Products:
     def __init__(self, res_data: Dict, amount: int):
         self.data = res_data
         self.amount = amount
-
 
     def get(self) -> List:
 
@@ -189,17 +187,18 @@ class Products:
 
         return products
 
-ready_products = Products(res_data=res_data, amount=5).get()
 
-#TODO: Exercise 8: Write a list of products text to a file
+ready_products = Products(
+    res_data=res_data,
+    amount=5
+).get()
+
+# TODO: Exercise 8: Write a list of products text to a file
 # 1. Learn how to create text files with Python using the simple example below
 # 2. Adjust simple example code to create your own products.txt file
 # 3. Make sure products.txt file content corresponds to the example below
 
 # Simple example to write a text to a file:
-
-
-
 with open(
         'D:\Python Mentorship\module_5\project_exercise\products_list.txt',
         'w'
@@ -208,24 +207,3 @@ with open(
         f.write(f'{a}\n')
 
     f.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
