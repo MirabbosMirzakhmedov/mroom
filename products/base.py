@@ -92,11 +92,11 @@ full_link: str = res.json()['results'][0].get('full_link')
 current_price: Dict = res.json()['results'][0]['prices']['current_price']
 currency: int = res.json()['results'][0]['prices']['currency']
 
-print(res.json()['results'][0].get('title'))
-print(res.json()['results'][0].get('image'))
-print(res.json()['results'][0].get('full_link'))
-print(res.json()['results'][0]['prices']['current_price'])
-print(res.json()['results'][0]['prices']['currency'])
+# print(res.json()['results'][0].get('title'))
+# print(res.json()['results'][0].get('image'))
+# print(res.json()['results'][0].get('full_link'))
+# print(res.json()['results'][0]['prices']['current_price'])
+# print(res.json()['results'][0]['prices']['currency'])
 
 products: List = []
 
@@ -146,8 +146,8 @@ def get_products(res_data: Dict) -> List:
 
 five_products: List = get_products(res_data)
 
-for five in five_products:
-    print(five)
+# for five in five_products:
+#     print(five)
 
 
 # TODO: Exercise 7: Create 'Products' class
@@ -188,22 +188,62 @@ class Products:
         return products
 
 
+
+
 ready_products = Products(
     res_data=res_data,
     amount=5
 ).get()
 
+
+# [0]['product']
+# [0]['current_price']
+# [0]['full_link']
+
+
 # TODO: Exercise 8: Write a list of products text to a file
 # 1. Learn how to create text files with Python using the simple example below
-# 2. Adjust simple example code to create your own products.txt file
-# 3. Make sure products.txt file content corresponds to the example below
+# 2. Adjust simple example code to create your own products_list.txt file
+# 3. Make sure products_list.txt file content corresponds to the example below
+
+
+from products.products_list_dict import \
+    first, \
+    second, \
+    third, \
+    fourth, \
+    fifth
 
 # Simple example to write a text to a file:
 with open(
         'D:\Python Mentorship\module_5\project_exercise\products_list.txt',
         'w'
+
 ) as f:
-    for a in ready_products:
-        f.write(f'{a}\n')
+    f.write("Product #0\n"
+            f"\t{first['title']}\n"
+            f"\t{first['current_price']}\n"
+            f"\t{first['full_link']}\n\n"
+
+            "Product #1\n"
+            f"\t{second['title']}\n"
+            f"\t{second['current_price']}\n"
+            f"\t{second['full_link']}\n\n"
+
+            "Product #2\n"
+            f"\t{third['title']}\n"
+            f"\t{third['current_price']}\n"
+            f"\t{third['full_link']}\n\n"
+
+            "Product #3\n"
+            f"\t{fourth['title']}\n"
+            f"\t{fourth['current_price']}\n"
+            f"\t{fourth['full_link']}\n\n"
+
+            "Product #4\n"
+            f"\t{fifth['title']}\n"
+            f"\t{fifth['current_price']}\n"
+            f"\t{fifth['full_link']}\n\n"
+            )
 
     f.close()
