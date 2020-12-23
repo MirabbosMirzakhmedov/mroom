@@ -1,6 +1,7 @@
 from typing import Dict
 import requests
 
+
 class ProductRequest:
 
     def __init__(self):
@@ -12,7 +13,6 @@ class ProductRequest:
                 'amazon-products1.p.rapidapi.com'
         }
         self.timeout: int = 20
-
 
     def get(self, params: Dict) -> requests.Response:
         return requests.get(

@@ -14,7 +14,7 @@ class MockResponse:
 
     def get_product(
             self,
-            current_price: [-1, 7.0, 20.0, 135.0],
+            current_price: float,
             title: str = 'Apple iPhone XR, 64GB, '
                          'White - Fully Unlocked (Renewed Premium)',
             image: str = 'https://m.media-amazon.com/'
@@ -55,10 +55,6 @@ class MockResponse:
         }
         return mock_response
 
-
-
-
-
     def get_products_price_higher_than_minus_one(
             self,
             *args,
@@ -69,8 +65,6 @@ class MockResponse:
                 self.get_product(current_price=-1.0) for _ in range(10)
             ]
         )
-
-
 
     def get_products_valid_and_invalid_title(
             self,
@@ -105,8 +99,6 @@ class MockResponse:
         return self.get_products(
             invalid_products=products
         )
-
-
 
     def get_products_valid_and_invalid_full_link(
             self,
@@ -153,6 +145,8 @@ class MockResponse:
         products = invalid_currency + valid_currency
         random.shuffle(products)
 
+
+
         return self.get_products(
             invalid_products=products
         )
@@ -169,16 +163,11 @@ class MockResponse:
         )
 
 
-
-
 class TestProducts(unittest.TestCase):
     def execute_request_and_get_products(self) -> List:
 
-
-
         # assigning the class to a variable
         request = ProductRequest()
-
 
         # Params added to the to the end of URL.
         # And res variable is Response with products which is in Params.
@@ -193,6 +182,8 @@ class TestProducts(unittest.TestCase):
             res_data=res.json(),
             amount=5,
         ).get()
+
+
 
     # we are mocking request get method,
     # and side_effect determines what is going to be returned.
@@ -213,7 +204,10 @@ class TestProducts(unittest.TestCase):
 
 
 
+        # self.assertEqual(len(products),5)
+
         for product in products:
+
             """
             For this test to be successful {comparison} needs to be TRUE.
             actual result var is something that i get from
@@ -227,9 +221,6 @@ class TestProducts(unittest.TestCase):
 
             self.assertEqual(comparison, second)
 
-
-
-
     @patch.object(
         requests,
         'get',
@@ -238,12 +229,10 @@ class TestProducts(unittest.TestCase):
     def test_products_has_valid_name(self, *args, **kwargs):
         products: List = self.execute_request_and_get_products()
 
+        self.assertEqual(len(products), 5)
 
         for product in products:
-            self.assertNotEqual(product['title'],'')
-
-
-
+            self.assertNotEqual(product['title'], '')
 
     @patch.object(
         requests,
@@ -254,7 +243,6 @@ class TestProducts(unittest.TestCase):
         products: List = self.execute_request_and_get_products()
 
         for product in products:
-
             # i want to make sure that product(image) is jpg.
             extension = product['image'].split('.')[-1]
 
@@ -264,8 +252,6 @@ class TestProducts(unittest.TestCase):
 
             self.assertEqual(actual_result, expected_result)
 
-
-
     @patch.object(
         requests,
         'get',
@@ -274,8 +260,7 @@ class TestProducts(unittest.TestCase):
     def test_products_has_invalid_full_link(self, *args, **kwargs):
         products: List = self.execute_request_and_get_products()
 
-
-
+        self.assertEqual(len(products), 5)
 
         for product in products:
             # i want to make sure that product(image) is jpg.
@@ -294,31 +279,47 @@ class TestProducts(unittest.TestCase):
     def test_products_has_invalid_currency(self, *args, **kwargs):
         products: List = self.execute_request_and_get_products()
 
+        self.assertEqual(len(products), 5)
+
         for product in products:
+
+
+            # print(product)
+            # breakpoint()
             # i want to make sure that product(image) is jpg.
 
             # comparing, if its jpg i want to get True
-            actual_result = product['prices']['currency'] == '$'
+            actual_result = product['currency'] == '$'
             expected_result = True
 
             self.assertEqual(actual_result, expected_result)
+
+
+
+
+    """
+    This test is now working.
+    """
 
     @patch.object(
         requests,
         'get',
         side_effect=MockResponse().get_products_price_higher_than_five_usd
     )
-    def test_products_has_invalid_currency(self, *args, **kwargs):
+    def test_products_price_higher_than_five_usd(self, *args, **kwargs):
         products: List = self.execute_request_and_get_products()
+
+
+
+
+
+        self.assertEqual(len(products), 5)
 
         for product in products:
             # i want to make sure that product(image) is jpg.
 
             # comparing, if its jpg i want to get True
-            actual_result = product['prices']['current_price'] > 5.0
+            actual_result = product['current_price'] == 5.0
             expected_result = True
 
             self.assertEqual(actual_result, expected_result)
-
-
-

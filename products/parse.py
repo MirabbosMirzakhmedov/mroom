@@ -14,24 +14,24 @@ class Products:
         for product in self.data['results']:
 
 
-            if product['prices']['current_price'] == -1.0:
-                continue
 
-            if product['title'] == '':
-                continue
+            # if product['prices']['current_price'] == -1.0:
+            #     continue
+            #
+            # if product['title'] == '':
+            #     continue
+            #
+            # if product['image'].split('.')[-1] != 'jpg':
+            #     continue
+            #
+            # if product['full_link'] != 'www.amazon.com':
+            #     continue
+            #
+            # if product['prices']['currency'] != '$':
+            #     continue
 
-            if product['image'].split('.')[-1] != 'jpg':
+            if product['prices']['current_price'] == 5:
                 continue
-
-            if product['full_link'] != 'www.amazon.com':
-                continue
-
-            if product['prices']['currency'] != '$':
-                continue
-
-            if product['price']['current_price'] < 5:
-                continue
-
 
             products.append(
                 {
@@ -43,13 +43,11 @@ class Products:
                 }
             )
 
-
-
             if len(products) == self.amount:
                 break
 
-            print(products)
-
-
+            # print(products)
+            # breakpoint()
 
         return products
+
