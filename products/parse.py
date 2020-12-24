@@ -3,14 +3,17 @@ from typing import Dict, List
 
 class Products:
 
-    def __init__(self, res_data: Dict, amount: int):
+    def __init__(self,
+                 res_data: Dict,
+                 amount: int
+                 ):
+
         self.data = res_data
         self.amount = amount
 
     def get(self) -> List:
 
         products: List = []
-
 
         for product in self.data['results']:
 
@@ -22,15 +25,15 @@ class Products:
 
             if product['image'].split('.')[-1] != 'jpg':
                 continue
-            #
-            if product['full_link'] != 'www.amazon.com':
+
+            if 'www.amazon.com' not in product['full_link']:
                 continue
-            #
+
             if product['prices']['currency'] != '$':
                 continue
 
-            # if product['prices']['current_price'] == 5:
-            #     continue
+            if product['prices']['current_price'] == 5:
+                continue
 
             products.append(
                 {
@@ -46,4 +49,3 @@ class Products:
                 break
 
         return products
-
