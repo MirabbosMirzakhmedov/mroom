@@ -32,7 +32,7 @@ class Products:
             if product['prices']['currency'] != '$':
                 continue
 
-            if product['prices']['current_price'] == 5:
+            if product['prices']['current_price'] <= 5:
                 continue
 
             products.append(

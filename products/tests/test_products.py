@@ -44,7 +44,7 @@ class MockResponse:
         mock_response.status_code = 200
 
         valid_products: List = [
-            self.get_product(current_price=135.0) for _ in range(10)
+            self.get_product(current_price=7.0) for _ in range(10)
         ]
 
         products = invalid_products + valid_products
@@ -76,7 +76,7 @@ class MockResponse:
         return self.get_products(
             invalid_products=[
                 self.get_product(
-                    current_price=135.0,
+                    current_price=7.0,
                     title=''
                 ) for _ in range(10)
             ]
@@ -89,14 +89,14 @@ class MockResponse:
     ) -> Mock:
         invalid_image_url: List = [
             self.get_product(
-                current_price=135.0,
+                current_price=7.0,
                 image='asdadsa'
             ) for _ in range(5)
         ]
 
         empty_image_url: List = [
             self.get_product(
-                current_price=135.0,
+                current_price=7.0,
                 image=''
             ) for _ in range(5)
         ]
@@ -115,14 +115,14 @@ class MockResponse:
     ) -> Mock:
         empty_full_link: List = [
             self.get_product(
-                current_price=135.0,
+                current_price=7.0,
                 full_link=''
             ) for _ in range(5)
         ]
 
         valid_full_link: List = [
             self.get_product(
-                current_price=135.0,
+                current_price=7.0,
                 full_link='https://www.amazon.com/dp/B08BGD4G36/?psc=1'
             ) for _ in range(5)
         ]
@@ -141,14 +141,14 @@ class MockResponse:
     ) -> Mock:
         invalid_currency: List = [
             self.get_product(
-                current_price=135.0,
+                current_price=7.0,
                 currency=''
             ) for _ in range(5)
         ]
 
         valid_currency: List = [
             self.get_product(
-                current_price=135.0,
+                current_price=7.0,
                 currency='$'
             ) for _ in range(5)
         ]
@@ -168,7 +168,7 @@ class MockResponse:
         return self.get_products(
             invalid_products=[
                 self.get_product(
-                    current_price=6.0
+                    current_price=3.0
                 ) for _ in range(10)
             ]
         )
@@ -186,6 +186,12 @@ class TestProducts(unittest.TestCase):
             }
         )
 
+
+        for product in res.json()['results']:
+            print("product['prices']: ", product['prices']['current_price'])
+
+
+
         return Products(
             res_data=res.json(),
             amount=5,
@@ -200,10 +206,7 @@ class TestProducts(unittest.TestCase):
         products: List = self.execute_request_and_get_products()
 
         for product in products:
-            comparison = product['current_price'] > -1.0
-            second = True
-
-            self.assertEqual(comparison, second)
+            self.assertEqual(product['current_price'] > -1.0, True)
 
     @patch.object(
         requests,
@@ -266,7 +269,7 @@ class TestProducts(unittest.TestCase):
         products: List = self.execute_request_and_get_products()
 
         for product in products:
-            actual_result = product['current_price'] == 5.0
+            actual_result = product['current_price'] <= 5.0
             expected_result = False
 
             self.assertEqual(actual_result, expected_result)
