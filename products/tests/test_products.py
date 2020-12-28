@@ -186,9 +186,6 @@ class TestProducts(unittest.TestCase):
             }
         )
 
-        for product in res.json()['results']:
-            print("product['prices']: ", product['prices']['current_price'])
-
         return Products(
             res_data=res.json(),
             amount=5,
