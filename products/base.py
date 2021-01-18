@@ -95,15 +95,15 @@
 #     amount=5
 # ).get()
 #
-# with open(
-#         'D:\Python Mentorship\module_5\project_exercise\products_list.txt',
-#         'w') as f:
-#
-#     for list_num, product in enumerate(products):
-#
-#         f.write(
-#             f'Product #{list_num}:\n'
-#             f'\t{product["title"]}\n'
-#             f'\tPrice: {product["currency"]}{product["current_price"]}\n'
-#             f'\tLink: {product["full_link"]}\n\n')
-#     f.close()
+with open(
+        'D:\Python Mentorship\module_5\project_exercise\products_list.txt',
+        'w') as f:
+
+    for list_num, product in enumerate(products):
+
+        f.write(
+            f'Product #{list_num}:\n'
+            f'\t{product["title"]}\n'
+            f'\tPrice: {product["currency"]}{product["current_price"]}\n'
+            f'\tLink: {product["full_link"]}\n\n')
+    f.close()

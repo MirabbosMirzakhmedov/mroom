@@ -5,6 +5,7 @@ __pycache__/
 
 # Editors
 .idea/
+mroom.env
 
 # Virtual environment
 .venv/
