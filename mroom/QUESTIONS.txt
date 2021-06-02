@@ -1,0 +1,14 @@
+1) in "settings.py" -> "allowed apps": it's showing type in word 'corsheaders',
+but you dont have it. Maybe it is some kind of a mistake?
+
+2) "run_playground.py" does not run in "gitBash".
+
+3) 'git' command does not work in Pycharm terminal
+
+4) Do most of the frontend developers use templates when creating a project?
+    Is it legal?
+        If yes: then, I understand how frontend work, can I work with clients already with my knowledge?
+
+5) indentation in html file does not work for me.
+
+6) Mobile Navigation does not work for me.

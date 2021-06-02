@@ -1,6 +1,8 @@
-from django.db import models
 import uuid
+
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.db import models
+
 
 class TimestampModel(models.Model):
     class Meta:
