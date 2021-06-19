@@ -9,6 +9,4 @@ but you dont have it. Maybe it is some kind of a mistake?
     Is it legal?
         If yes: then, I understand how frontend work, can I work with clients already with my knowledge?
 
-5) indentation in html file does not work for me.
-
-6) Mobile Navigation does not work for me.
+5) indentation in html file does not work for me as yours
