@@ -9,15 +9,15 @@ class TestSignup(TestCase):
         client: APIClient = APIClient()
         payload: Dict = {
             'email': 'invalid_email',
-            'password': '12345678'
+            'password': '12345678',
+            'name': 'Mirabbos',
+            'terms': True
         }
-
         res = client.post(
             path='/api/signup/',
             data=json.dumps(payload),
             content_type='application/json',
         )
-        breakpoint()
         self.assertEqual(
             res.status_code,
             400
@@ -35,7 +35,9 @@ class TestSignup(TestCase):
         client: APIClient = APIClient()
         payload: Dict = {
             'email': 'willparkerboss@gmail.com',
-            'password': '123'
+            'password': '123',
+            'name': 'Mirabbos',
+            'terms': True
         }
         res = client.post(
             path='/api/signup/',
@@ -60,7 +62,9 @@ class TestSignup(TestCase):
         client: APIClient = APIClient()
         data: Dict = {
             'email': 'willparkerboss@gmail.com',
-            'password': '123456789123456789'
+            'password': '123456789123456789',
+            'name': 'Mirabbos',
+            'terms': True
         }
         res = client.post(
             path='/api/signup/',
