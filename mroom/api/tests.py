@@ -4,6 +4,7 @@ from typing import Dict
 import json
 
 
+
 class TestSignup(TestCase):
     def test_invalid_email(self):
         client: APIClient = APIClient()
@@ -84,3 +85,57 @@ class TestSignup(TestCase):
                 ]
             }
         )
+
+    def test_unaccepted_terms_checkbox(self):
+        client: APIClient = APIClient()
+        data: Dict = {
+            'email': 'willparkerboss@gmail.com',
+            'password': '12345678',
+            'name': 'Mirabbos',
+            'terms': False
+        }
+        res = client.post(
+            path='/api/signup/',
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                "terms": [
+                    "You must accept terms and conditions."
+                ]
+            }
+        )
+
+    def test_email_already_exists(self):
+        client: APIClient = APIClient()
+        data: Dict = {
+            'email': 'willparkerboss@gmail.com',
+            'password': '12345678',
+            'name': 'Mirabbos',
+            'terms': True
+        }
+        res = client.post(
+            path='/api/signup/',
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                "email": [
+                    "This email address is already being used."
+                ]
+            }
+        )
+
+
