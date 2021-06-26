@@ -5,7 +5,23 @@ import json
 from requests.exceptions import HTTPError
 from mroom.api.models import User
 import requests
-from unittest.mock import patch
+from unittest.mock import patch, Mock
+
+
+
+class MockResponse:
+    def successful_response(
+            self, *args, **kwargs
+    ) -> Mock:
+        response_mock = Mock()
+        response_mock.status_code = 200
+        breakpoint()
+
+        response_mock.json.return_value = {
+            'contact_id': 'cd87cc3a-c704-47d4-bef9-26ff9a2b2a94'
+        }
+
+        return response_mock
 
 
 class TestSignup(TestCase):
@@ -146,14 +162,16 @@ class TestSignup(TestCase):
         attribute='post',
         side_effect=HTTPError,
     )
-    def test_failed_to_send_email(self):
+    def test_failed_to_send_email(self, *args, **kwargs):
         client: APIClient = APIClient()
         payload: Dict = {
             'email': 'existing_email@gmail.com',
-            'password': '12345678'
+            'password': '123456789',
+            'name': 'Mirabbos',
+            'terms': True
         }
         res = client.post(
-            path='/api/exercise/signup/',
+            path='/api/signup/',
             data=json.dumps(payload),
             content_type='application/json',
         )
@@ -175,8 +193,36 @@ class TestSignup(TestCase):
             }
         )
 
-# TODO:
-#  1) last test did not work,
-#  returned "TypeError: test_failed_to_send_email() takes 1 positional argument but 2 were given"
-
-
+    @patch.object(
+        target=requests,
+        attribute='post',
+        side_effect=MockResponse().successful_response,
+    )
+    def test_successful_signup(self, *args, **kwargs):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'email': 'mirabbos.dov@gmail.com',
+            'password': '123456789',
+            'name': 'Mirabbos',
+            'terms': True
+        }
+        res = client.post(
+            path='/api/signup/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            201
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'detail': f'Signup was successful, '
+                          f'registration email was sent to {payload["email"]}'
+            }
+        )
+        self.assertEqual(
+            User.objects.filter(email=payload['email']).exists(),
+            True
+        )
