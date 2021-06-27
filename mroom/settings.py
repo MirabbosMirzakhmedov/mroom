@@ -4,7 +4,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+
 
 DEBUG = True
 
@@ -94,3 +94,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+BIGMAILER_API_KEY = os.getenv("BIGMAILER_API_KEY")
+CAMPAIGN_ID = os.getenv("CAMPAIGN_ID")
