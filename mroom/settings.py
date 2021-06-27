@@ -101,5 +101,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-BIGMAILER_API_KEY = os.getenv("BIGMAILER_API_KEY")
-CAMPAIGN_ID = os.getenv("CAMPAIGN_ID")
