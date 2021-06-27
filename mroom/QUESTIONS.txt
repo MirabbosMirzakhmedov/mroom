@@ -1,5 +1,9 @@
 1) in mentoring project, for ServiceUnavailable() exception, we set status_code = 502.
     But, in mroom project, for ServiceUnavailable() exception, we set status_code = 503.
     Why?
+    503 is the correct way
 
 2) Why do we use 'payload' name for the variable that holds all information?
+request and response message
+The Payload of an API Module is the body of your request and response message.
+It contains the data that you send to the server when you make an API request. You can send and receive Payload in different formats, for instance JSON.

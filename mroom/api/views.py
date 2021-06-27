@@ -7,12 +7,12 @@ from mroom.api.email.campaign import Signup
 from mroom.exceptions import ServiceUnavailable
 from django.db.transaction import atomic
 
-
 from rest_framework.decorators import api_view
 from mroom.api.serializers import SignupSerializer
 import typing
 import json
 import requests
+
 
 @api_view(['POST'])
 @atomic
