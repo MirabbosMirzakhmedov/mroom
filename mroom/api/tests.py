@@ -1,12 +1,13 @@
-from django.test import TestCase
-from rest_framework.test import APIClient
-from typing import Dict
 import json
-from requests.exceptions import HTTPError
-from mroom.api.models import User
-import requests
+from typing import Dict
 from unittest.mock import patch, Mock
 
+import requests
+from django.test import TestCase
+from requests.exceptions import HTTPError
+from rest_framework.test import APIClient
+
+from mroom.api.models import User
 
 
 class MockResponse:
@@ -15,7 +16,6 @@ class MockResponse:
     ) -> Mock:
         response_mock = Mock()
         response_mock.status_code = 200
-        breakpoint()
 
         response_mock.json.return_value = {
             'contact_id': 'cd87cc3a-c704-47d4-bef9-26ff9a2b2a94'
@@ -133,9 +133,15 @@ class TestSignup(TestCase):
 
     def test_email_already_exists(self):
         client: APIClient = APIClient()
+        email: str = 'willparkerboss@gmail.com'
+        password: str = '123456789'
+        User.objects.create_user(
+            email=email,
+            password=password
+        )
         payload: Dict = {
-            'email': 'willparkerboss@gmail.com',
-            'password': '12345678',
+            'email': email,
+            'password': password,
             'name': 'Mirabbos',
             'terms': True
         }
