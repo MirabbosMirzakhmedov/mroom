@@ -3,9 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
 # Editors
 .idea/
-
+mroom.env/
 
 # Virtual environment
 .venv/
