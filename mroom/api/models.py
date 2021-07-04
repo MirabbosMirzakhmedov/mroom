@@ -20,12 +20,20 @@ class ProjectModel(TimestampModel):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(
+            self,
+            email,
+            name,
+            terms,
+            password=None,
+    ):
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError('User must have an email address')
 
         user = self.model(
             email=self.normalize_email(email),
+            name=name,
+            terms=terms,
         )
 
         user.set_password(password)
@@ -35,8 +43,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, ProjectModel):
     email = models.EmailField(unique=True)
+    name = models.CharField(max_length=255, null=False, default=str)
+    terms = models.BooleanField(default=False)
 
     objects = UserManager()
+
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'

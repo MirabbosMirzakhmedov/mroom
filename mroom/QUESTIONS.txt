@@ -1,12 +1,9 @@
-1) in "settings.py" -> "allowed apps": it's showing type in word 'corsheaders',
-but you dont have it. Maybe it is some kind of a mistake?
+1) in mentoring project, for ServiceUnavailable() exception, we set status_code = 502.
+    But, in mroom project, for ServiceUnavailable() exception, we set status_code = 503.
+    Why?
+    503 is the correct way
 
-2) "run_playground.py" does not run in "gitBash".
-
-3) 'git' command does not work in Pycharm terminal
-
-4) Do most of the frontend developers use templates when creating a project?
-    Is it legal?
-        If yes: then, I understand how frontend work, can I work with clients already with my knowledge?
-
-5) indentation in html file does not work for me as yours
+2) Why do we use 'payload' name for the variable that holds all information?
+request and response message
+The Payload of an API Module is the body of your request and response message.
+It contains the data that you send to the server when you make an API request. You can send and receive Payload in different formats, for instance JSON.
