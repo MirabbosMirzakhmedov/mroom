@@ -7,6 +7,8 @@ __pycache__/
 # Editors
 .idea/
 mroom.env/
+db.sqlite3/
+
 # Virtual environment
 .venv/
 
