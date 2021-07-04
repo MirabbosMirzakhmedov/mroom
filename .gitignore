@@ -2,11 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
-mroom.env
+
 
 # Editors
 .idea/
-
+mroom.env/
+db.sqlite3/
 
 # Virtual environment
 .venv/
