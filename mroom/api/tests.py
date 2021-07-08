@@ -10,8 +10,6 @@ from rest_framework.test import APIClient
 from mroom.api.models import User
 
 
-
-
 class TestSignup(TestCase):
     def test_invalid_email(self):
         client: APIClient = APIClient()
