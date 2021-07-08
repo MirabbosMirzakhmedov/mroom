@@ -51,6 +51,8 @@ def signup(request: HttpRequest) -> JsonResponse:
     user: User = User.objects.create_user(
         email=email,
         password=serializer.data.get('password'),
+        name=serializer.data.get('name'),
+        terms=serializer.data.get('terms')
     )
 
     try:

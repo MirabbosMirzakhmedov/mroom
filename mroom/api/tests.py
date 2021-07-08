@@ -10,18 +10,6 @@ from rest_framework.test import APIClient
 from mroom.api.models import User
 
 
-class MockResponse:
-    def successful_response(
-            self, *args, **kwargs
-    ) -> Mock:
-        response_mock = Mock()
-        response_mock.status_code = 200
-
-        response_mock.json.return_value = {
-            'contact_id': 'cd87cc3a-c704-47d4-bef9-26ff9a2b2a94'
-        }
-
-        return response_mock
 
 
 class TestSignup(TestCase):
@@ -135,9 +123,13 @@ class TestSignup(TestCase):
         client: APIClient = APIClient()
         email: str = 'willparkerboss@gmail.com'
         password: str = '123456789'
+        name: str = 'Mirabbos Mirzakhmedov'
+        terms: bool = True
         User.objects.create_user(
             email=email,
-            password=password
+            password=password,
+            name=name,
+            terms=terms
         )
         payload: Dict = {
             'email': email,
@@ -163,12 +155,7 @@ class TestSignup(TestCase):
             }
         )
 
-    @patch.object(
-        target=requests,
-        attribute='post',
-        side_effect=HTTPError,
-    )
-    def test_failed_to_send_email(self, *args, **kwargs):
+    def test_failed_to_send_email(self):
         client: APIClient = APIClient()
         payload: Dict = {
             'email': 'existing_email@gmail.com',
@@ -176,11 +163,19 @@ class TestSignup(TestCase):
             'name': 'Mirabbos',
             'terms': True
         }
-        res = client.post(
-            path='/api/signup/',
-            data=json.dumps(payload),
-            content_type='application/json',
+        res_mock = patch.object(
+            target=requests,
+            attribute='post',
+            side_effect=[
+                HTTPError
+            ]
         )
+        with res_mock:
+            res = client.post(
+                path='/api/signup/',
+                data=json.dumps(payload),
+                content_type='application/json'
+            )
         user_exists: bool = User.objects.filter(
             email=payload['email']
         ).exists()
@@ -199,11 +194,6 @@ class TestSignup(TestCase):
             }
         )
 
-    @patch.object(
-        target=requests,
-        attribute='post',
-        side_effect=MockResponse().successful_response,
-    )
     def test_successful_signup(self, *args, **kwargs):
         client: APIClient = APIClient()
         payload: Dict = {
@@ -212,11 +202,26 @@ class TestSignup(TestCase):
             'name': 'Mirabbos',
             'terms': True
         }
-        res = client.post(
-            path='/api/signup/',
-            data=json.dumps(payload),
-            content_type='application/json'
+        res_mock = patch.object(
+            target=requests,
+            attribute='post',
+            side_effect=[
+                Mock(
+                    **{
+                        'status_code': 200,
+                        'json.return_value': {
+                            'contact_id': '09540eaf-6ee8-427c-803d-606c5e299bb3'
+                        }
+                    }
+                )
+            ]
         )
+        with res_mock:
+            res = client.post(
+                path='/api/signup/',
+                data=json.dumps(payload),
+                content_type='application/json'
+            )
         self.assertEqual(
             res.status_code,
             201
