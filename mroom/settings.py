@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'mroom.api'
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -38,14 +40,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
-
-
 ROOT_URLCONF = 'mroom.urls'
 
 TEMPLATES = [
@@ -100,4 +98,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+BIGMAILER_API_KEY = os.getenv('BIGMAILER_API_KEY')
+
+CAMPAIGN_ID = os.getenv('CAMPAIGN_ID')
