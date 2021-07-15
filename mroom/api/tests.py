@@ -192,7 +192,7 @@ class TestSignup(TestCase):
             }
         )
 
-    def test_successful_signup(self, *args, **kwargs):
+    def test_successful_signup(self):
         client: APIClient = APIClient()
         payload: Dict = {
             'email': 'mirabbos.dov@gmail.com',
@@ -235,3 +235,13 @@ class TestSignup(TestCase):
             User.objects.filter(email=payload['email']).exists(),
             True
         )
+
+class TestSignin(TestCase):
+    def test_empty_email_field(self):
+        pass
+
+    def test_invalid_email(self):
+        pass
+
+    def test_empty_password_field(self):
+        pass

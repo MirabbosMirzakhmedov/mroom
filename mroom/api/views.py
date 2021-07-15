@@ -12,7 +12,7 @@ from mroom import settings
 from mroom.api.email.campaign import Signup
 from mroom.api.exceptions import ServiceUnavailable
 from mroom.api.models import User
-from mroom.api.serializers import SignupSerializer
+from mroom.api.serializers import SignupSerializer, SigninSerializer
 
 
 @api_view(['POST'])
@@ -84,5 +84,19 @@ def signup(request: HttpRequest) -> JsonResponse:
         data={
             'detail': f'Signup was successful, '
                       f'registration email was sent to {user.email}'
+        }
+    )
+
+def signin(request: HttpRequest) -> JsonResponse:
+    signin_data: typing.Dict = json.loads(request.body)
+
+    serializers = SigninSerializer(data=signin_data)
+    serializers.is_valid(raise_exception=True)
+    print(signin_data)
+
+    return JsonResponse(
+        status=201,
+        data={
+            'detail': 'success'
         }
     )

@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.urls import path
 
-from mroom.api.views import signup
+from mroom.api.views import (
+    signup,
+    signin
+)
 from mroom.views import (
     get_sample
 )
@@ -9,5 +12,6 @@ from mroom.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('sample/', get_sample, name='get_sample'),
-    path('api/signup/', signup)
+    path('api/signup/', signup),
+    path('api/signin/', signin),
 ]
