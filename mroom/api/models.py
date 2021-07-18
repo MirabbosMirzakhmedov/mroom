@@ -1,5 +1,5 @@
 import uuid
-
+from mroom.common.utils import gen_session_token
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
 
@@ -52,3 +52,12 @@ class User(AbstractBaseUser, ProjectModel):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+
+class Session(ProjectModel):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='sessions'
+    )
+
+    token = models.TextField(default=gen_session_token, unique=True)

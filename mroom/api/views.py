@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 
 from mroom import settings
 from mroom.api.email.campaign import Signup
-from mroom.api.exceptions import ServiceUnavailable
+from mroom.api.exceptions import ServiceUnavailable, AuthenticationFailed
 from mroom.api.models import User
 from mroom.api.serializers import SignupSerializer, SigninSerializer
 
@@ -87,12 +87,35 @@ def signup(request: HttpRequest) -> JsonResponse:
         }
     )
 
+
+@api_view(['POST'])
 def signin(request: HttpRequest) -> JsonResponse:
     signin_data: typing.Dict = json.loads(request.body)
 
-    serializers = SigninSerializer(data=signin_data)
-    serializers.is_valid(raise_exception=True)
-    print(signin_data)
+    serializer = SigninSerializer(data=signin_data)
+    serializer.is_valid(raise_exception=True)
+
+    email: str = serializer.data.get('email')
+
+    query_set = User.objects.filter(
+        email=email)
+
+    if query_set.exists() == False:
+        raise AuthenticationFailed()
+
+    # our user
+    user = query_set.first()
+
+    if user.check_password(
+            raw_password=serializer.data.get(
+                'password'
+            )
+    ) == False:
+        raise AuthenticationFailed()
+
+
+
+
 
     return JsonResponse(
         status=201,
