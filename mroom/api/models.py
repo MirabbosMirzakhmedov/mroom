@@ -59,5 +59,5 @@ class Session(ProjectModel):
         on_delete=models.CASCADE,
         related_name='sessions'
     )
-
     token = models.TextField(default=gen_session_token, unique=True)
+    last_active = models.DateTimeField(auto_now_add=True, db_index=True)

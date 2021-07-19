@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 from mroom import settings
 from mroom.api.email.campaign import Signup
 from mroom.api.exceptions import ServiceUnavailable, AuthenticationFailed
-from mroom.api.models import User
+from mroom.api.models import User, Session
 from mroom.api.serializers import SignupSerializer, SigninSerializer
 
 
@@ -113,9 +113,9 @@ def signin(request: HttpRequest) -> JsonResponse:
     ) == False:
         raise AuthenticationFailed()
 
-
-
-
+    # At this point, you can finally create a new session
+    # Use models.Session to create a new Session object, assign user to the session via .create(user=user) method
+    # Assign Session object to a new variable called session: models.Session
 
     return JsonResponse(
         status=201,
