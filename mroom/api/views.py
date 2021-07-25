@@ -1,3 +1,4 @@
+import datetime
 import json
 import typing
 
@@ -5,8 +6,10 @@ import requests
 from django.db.transaction import atomic
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from mroom import settings
 from mroom.api.email.campaign import Signup
@@ -89,7 +92,7 @@ def signup(request: HttpRequest) -> JsonResponse:
 
 
 @api_view(['POST'])
-def signin(request: HttpRequest) -> JsonResponse:
+def signin(request: HttpRequest) -> Response:
     signin_data: typing.Dict = json.loads(request.body)
 
     serializer = SigninSerializer(data=signin_data)
@@ -113,15 +116,15 @@ def signin(request: HttpRequest) -> JsonResponse:
     ) == False:
         raise AuthenticationFailed()
 
-    # At this point, you can finally create a new session
-    # Use models.Session to create a new Session object, assign user to the session via .create(user=user) method
-    # Assign Session object to a new variable called session: models.Session
-
     session: Session = Session.objects.create(user=user)
-
-    return JsonResponse(
-        status=201,
-        data={
-            'detail': 'success'
-        }
+    response: Response = Response()
+    response.set_cookie(
+        key=settings.SESSION_COOKIE_NAME,
+        expires=timezone.now() + datetime.timedelta(days=365 * 100),
+        value=session.token,
+        secure=True,
+        httponly=True,
+        samesite='Strict'
     )
+
+    return response
