@@ -117,6 +117,8 @@ def signin(request: HttpRequest) -> JsonResponse:
     # Use models.Session to create a new Session object, assign user to the session via .create(user=user) method
     # Assign Session object to a new variable called session: models.Session
 
+    session: Session = Session.objects.create(user=user)
+
     return JsonResponse(
         status=201,
         data={
