@@ -329,7 +329,7 @@ class TestSignin(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'detail': 'Incorrect authentication credentials.'
+                'detail': 'Incorrect authentication credentials'
             }
         )
 
