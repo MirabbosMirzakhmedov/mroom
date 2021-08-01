@@ -1,7 +1,9 @@
 import uuid
-from mroom.common.utils import gen_session_token
+
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
+
+from mroom.common.utils import gen_session_token
 
 
 class TimestampModel(models.Model):

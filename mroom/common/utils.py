@@ -9,5 +9,6 @@ def gen_token(byte_length: int) -> str:
 
     return token
 
+
 def gen_session_token():
     return gen_token(64)

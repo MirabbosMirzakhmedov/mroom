@@ -7,6 +7,7 @@ from django.test import TestCase
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
 
+from mroom import settings
 from mroom.api.models import User
 
 
@@ -280,8 +281,8 @@ class TestSignin(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "email": [
-                    "Enter a valid email address."
+                'email': [
+                    'Enter a valid email address.'
                 ]
             }
         )
@@ -304,8 +305,8 @@ class TestSignin(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "password": [
-                    "This field may not be blank."
+                'password': [
+                    'This field may not be blank.'
                 ]
             }
         )
@@ -328,7 +329,7 @@ class TestSignin(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "detail": "Incorrect authentication credentials."
+                'detail': 'Incorrect authentication credentials.'
             }
         )
 
@@ -343,7 +344,6 @@ class TestSignin(TestCase):
             data=json.dumps(payload),
             content_type='application/json',
         )
-        breakpoint()
         self.assertEqual(
             res.status_code,
             401
@@ -351,6 +351,32 @@ class TestSignin(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "detail": "Incorrect authentication credentials"
+                'detail': 'Incorrect authentication credentials'
             }
+        )
+
+    def test_successful_signin(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            email='new_email@gmail.com',
+            password='new_password',
+            name='Mirabbos',
+            terms=True,
+        )
+        payload: Dict = {
+            'email': user.email,
+            'password': 'new_password',
+        }
+        res = client.post(
+            path='/api/signin/',
+            data=json.dumps(payload),
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            200
+        )
+        self.assertEqual(
+            settings.SESSION_COOKIE_NAME in res.cookies,
+            True
         )

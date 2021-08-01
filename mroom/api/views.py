@@ -106,7 +106,6 @@ def signin(request: HttpRequest) -> Response:
     if query_set.exists() == False:
         raise AuthenticationFailed()
 
-    # our user
     user = query_set.first()
 
     if user.check_password(
@@ -117,6 +116,7 @@ def signin(request: HttpRequest) -> Response:
         raise AuthenticationFailed()
 
     session: Session = Session.objects.create(user=user)
+
     response: Response = Response()
     response.set_cookie(
         key=settings.SESSION_COOKIE_NAME,
