@@ -1,6 +1,7 @@
 import datetime
 import json
 import typing
+from django.db.models import QuerySet
 
 import requests
 from django.db.transaction import atomic
@@ -100,19 +101,16 @@ def signin(request: HttpRequest) -> Response:
 
     email: str = serializer.data.get('email')
 
-    query_set = User.objects.filter(
-        email=email)
+    user_query: QuerySet = User.objects.filter(email=email)
 
-    if query_set.exists() == False:
+    if not user_query.exists():
         raise AuthenticationFailed()
 
-    user = query_set.first()
+    user: User = user_query.first()
 
-    if user.check_password(
-            raw_password=serializer.data.get(
-                'password'
-            )
-    ) == False:
+    if not user.check_password(
+        raw_password=serializer.data.get('password')
+    ):
         raise AuthenticationFailed()
 
     session: Session = Session.objects.create(user=user)

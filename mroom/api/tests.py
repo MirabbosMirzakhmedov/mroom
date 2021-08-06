@@ -335,6 +335,12 @@ class TestSignin(TestCase):
 
     def test_user_exists_wrong_password(self):
         client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            email='mirabbos.mirzakhmedov@edu.rtu.lv',
+            password='correct_password',
+            name='Mirabbos',
+            terms=True,
+        )
         payload: Dict = {
             'email': 'mirabbos.mirzakhmedov@edu.rtu.lv',
             'password': 'wrong_password'
