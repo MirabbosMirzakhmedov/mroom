@@ -3,6 +3,8 @@ import uuid
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
 
+from mroom.common.utils import gen_session_token
+
 
 class TimestampModel(models.Model):
     class Meta:
@@ -51,3 +53,13 @@ class User(AbstractBaseUser, ProjectModel):
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+
+class Session(ProjectModel):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='sessions'
+    )
+    token = models.TextField(default=gen_session_token, unique=True)
+    last_active = models.DateTimeField(auto_now_add=True, db_index=True)

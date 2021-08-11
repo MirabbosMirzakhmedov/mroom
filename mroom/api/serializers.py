@@ -9,3 +9,8 @@ class SignupSerializer(serializers.Serializer):
         min_length=8,
         required=True
     )
+
+class SigninSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True)
+

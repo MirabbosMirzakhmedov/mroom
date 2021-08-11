@@ -7,6 +7,7 @@ from django.test import TestCase
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
 
+from mroom import settings
 from mroom.api.models import User
 
 
@@ -192,7 +193,7 @@ class TestSignup(TestCase):
             }
         )
 
-    def test_successful_signup(self, *args, **kwargs):
+    def test_successful_signup(self):
         client: APIClient = APIClient()
         payload: Dict = {
             'email': 'mirabbos.dov@gmail.com',
@@ -233,5 +234,155 @@ class TestSignup(TestCase):
         )
         self.assertEqual(
             User.objects.filter(email=payload['email']).exists(),
+            True
+        )
+
+
+class TestSignin(TestCase):
+    def test_empty_email_field(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'email': '',
+            'password': 'sample_password',
+        }
+        res = client.post(
+            path='/api/signin/',
+            data=json.dumps(payload),
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'email': [
+                    'This field may not be blank.'
+                ]
+            }
+        )
+
+    def test_invalid_email(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'email': 'invalid_email',
+            'password': 'secret_password'
+        }
+        res = client.post(
+            path='/api/signin/',
+            data=json.dumps(payload),
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'email': [
+                    'Enter a valid email address.'
+                ]
+            }
+        )
+
+    def test_empty_password_field(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'email': 'sample@email.com',
+            'password': ''
+        }
+        res = client.post(
+            path='/api/signin/',
+            data=json.dumps(payload),
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'password': [
+                    'This field may not be blank.'
+                ]
+            }
+        )
+
+    def test_user_does_not_exist(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'email': 'sample@email.com',
+            'password': '123456789'
+        }
+        res = client.post(
+            path='/api/signin/',
+            data=json.dumps(payload),
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            401
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'detail': 'Incorrect authentication credentials'
+            }
+        )
+
+    def test_user_exists_wrong_password(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            email='mirabbos.mirzakhmedov@edu.rtu.lv',
+            password='correct_password',
+            name='Mirabbos',
+            terms=True,
+        )
+        payload: Dict = {
+            'email': user.email,
+            'password': 'wrong_password'
+        }
+        res = client.post(
+            path='/api/signin/',
+            data=json.dumps(payload),
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            401
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'detail': 'Incorrect authentication credentials'
+            }
+        )
+
+    def test_successful_signin(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            email='new_email@gmail.com',
+            password='new_password',
+            name='Mirabbos',
+            terms=True,
+        )
+        payload: Dict = {
+            'email': user.email,
+            'password': 'new_password',
+        }
+        res = client.post(
+            path='/api/signin/',
+            data=json.dumps(payload),
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            200
+        )
+        self.assertEqual(
+            settings.SESSION_COOKIE_NAME in res.cookies,
             True
         )

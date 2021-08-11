@@ -1,18 +1,22 @@
+import datetime
 import json
 import typing
+from django.db.models import QuerySet
 
 import requests
 from django.db.transaction import atomic
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from mroom import settings
 from mroom.api.email.campaign import Signup
-from mroom.api.exceptions import ServiceUnavailable
-from mroom.api.models import User
-from mroom.api.serializers import SignupSerializer
+from mroom.api.exceptions import ServiceUnavailable, AuthenticationFailed
+from mroom.api.models import User, Session
+from mroom.api.serializers import SignupSerializer, SigninSerializer
 
 
 @api_view(['POST'])
@@ -86,3 +90,39 @@ def signup(request: HttpRequest) -> JsonResponse:
                       f'registration email was sent to {user.email}'
         }
     )
+
+
+@api_view(['POST'])
+def signin(request: HttpRequest) -> Response:
+    signin_data: typing.Dict = json.loads(request.body)
+
+    serializer = SigninSerializer(data=signin_data)
+    serializer.is_valid(raise_exception=True)
+
+    email: str = serializer.data.get('email')
+
+    user_query: QuerySet = User.objects.filter(email=email)
+
+    if not user_query.exists():
+        raise AuthenticationFailed()
+
+    user: User = user_query.first()
+
+    if not user.check_password(
+        raw_password=serializer.data.get('password')
+    ):
+        raise AuthenticationFailed()
+
+    session: Session = Session.objects.create(user=user)
+
+    response: Response = Response()
+    response.set_cookie(
+        key=settings.SESSION_COOKIE_NAME,
+        expires=timezone.now() + datetime.timedelta(days=365 * 100),
+        value=session.token,
+        secure=True,
+        httponly=True,
+        samesite='Strict'
+    )
+
+    return response
