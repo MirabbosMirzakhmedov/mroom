@@ -342,7 +342,7 @@ class TestSignin(TestCase):
             terms=True,
         )
         payload: Dict = {
-            'email': 'mirabbos.mirzakhmedov@edu.rtu.lv',
+            'email': user.email,
             'password': 'wrong_password'
         }
         res = client.post(
