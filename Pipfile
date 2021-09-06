@@ -16,6 +16,7 @@ djangorestframework = "*"
 python-dotenv = "*"
 django-cors-headers = "*"
 django-extensions = "*"
+django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.9"
