@@ -1,9 +1,8 @@
-import datetime
 import json
 import typing
-from django.db.models import QuerySet
 
 import requests
+from django.db.models import QuerySet
 from django.db.transaction import atomic
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
@@ -14,9 +13,17 @@ from rest_framework.response import Response
 
 from mroom import settings
 from mroom.api.email.campaign import Signup
-from mroom.api.exceptions import ServiceUnavailable, AuthenticationFailed
+from mroom.api.exceptions import (
+    ServiceUnavailable,
+    AuthenticationFailed,
+    AuthorizationFailed,
+    SessionFailed,
+)
 from mroom.api.models import User, Session
-from mroom.api.serializers import SignupSerializer, SigninSerializer
+from mroom.api.serializers import (
+    SignupSerializer,
+    SigninSerializer,
+)
 
 
 @api_view(['POST'])
@@ -109,7 +116,7 @@ def signin(request: HttpRequest) -> Response:
     user: User = user_query.first()
 
     if not user.check_password(
-        raw_password=serializer.data.get('password')
+            raw_password=serializer.data.get('password')
     ):
         raise AuthenticationFailed()
 
@@ -118,11 +125,41 @@ def signin(request: HttpRequest) -> Response:
     response: Response = Response()
     response.set_cookie(
         key=settings.SESSION_COOKIE_NAME,
-        expires=timezone.now() + datetime.timedelta(days=365 * 100),
+        expires=timezone.now() + settings.SESSION_DURATION,
         value=session.token,
         secure=True,
         httponly=True,
         samesite='Strict'
+    )
+
+    return response
+
+
+@api_view(['POST'])
+def signout(request: HttpRequest) -> Response:
+    token: typing.Union[str, None] = request.COOKIES.get(
+        settings.SESSION_COOKIE_NAME)
+
+    if token == None:
+        raise AuthorizationFailed()
+
+    try:
+        session = Session.objects.get(
+            is_active=True,
+            token=token,
+            last_active__gte=timezone.now() - settings.SESSION_DURATION,
+        )
+
+        session.last_active = timezone.now()
+        session.is_active = False
+        session.save()
+
+    except Session.DoesNotExist:
+        raise SessionFailed()
+
+    response: Response = Response()
+    response.delete_cookie(
+        settings.SESSION_COOKIE_NAME
     )
 
     return response

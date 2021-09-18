@@ -6,16 +6,17 @@ from django.conf import settings
 from mroom.api.views import (
     signup,
     signin,
+    signout,
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/signup/', signup),
     path('api/signin/', signin),
+    path('api/signout/', signout),
 ]
 
 if settings.DEBUG:
     urlpatterns.append(
         path('__debug__/', include(debug_toolbar.urls))
     )
-   

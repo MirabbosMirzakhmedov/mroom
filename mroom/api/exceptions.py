@@ -12,3 +12,14 @@ class AuthenticationFailed(APIException):
     status_code = status.HTTP_401_UNAUTHORIZED
     default_detail = 'Incorrect authentication credentials'
     default_code = 'authentication_failed'
+
+class AuthorizationFailed(APIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = 'Authorization cookie missing'
+    default_code = 'authorization_failed'
+
+class SessionFailed(APIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = 'Invalid session or inactive user'
+    default_code = 'session_failed'
+
