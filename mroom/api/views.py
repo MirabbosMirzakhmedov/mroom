@@ -8,22 +8,22 @@ from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from mroom import settings
+from mroom.api.authentication.api import PrivateAPIAuthentication
+from mroom.api.authentication.api import get_authorized_session
 from mroom.api.email.campaign import Signup
 from mroom.api.exceptions import (
     ServiceUnavailable,
     AuthenticationFailed,
-    AuthorizationFailed,
-    SessionFailed,
 )
 from mroom.api.models import User, Session
-from mroom.api.serializers import (
-    SignupSerializer,
-    SigninSerializer,
-)
+from mroom.api.serializer.signin import SigninSerializer
+from mroom.api.serializer.signup import SignupSerializer
+from mroom.api.serializer.user import CurrentUserSerializer
 
 
 @api_view(['POST'])
@@ -137,25 +137,13 @@ def signin(request: HttpRequest) -> Response:
 
 @api_view(['POST'])
 def signout(request: HttpRequest) -> Response:
-    token: typing.Union[str, None] = request.COOKIES.get(
-        settings.SESSION_COOKIE_NAME)
+    session: Session = get_authorized_session(
+        request=request
+    )
 
-    if token == None:
-        raise AuthorizationFailed()
-
-    try:
-        session = Session.objects.get(
-            is_active=True,
-            token=token,
-            last_active__gte=timezone.now() - settings.SESSION_DURATION,
-        )
-
-        session.last_active = timezone.now()
-        session.is_active = False
-        session.save()
-
-    except Session.DoesNotExist:
-        raise SessionFailed()
+    session.last_active = timezone.now()
+    session.is_active = False
+    session.save()
 
     response: Response = Response()
     response.delete_cookie(
@@ -163,3 +151,12 @@ def signout(request: HttpRequest) -> Response:
     )
 
     return response
+
+
+class CurrentUserViewSet(viewsets.ViewSet):
+    authentication_classes = [PrivateAPIAuthentication]
+
+    def list(self, request: HttpRequest) -> Response:
+        return Response(
+            CurrentUserSerializer(instance=request.user).data
+        )
