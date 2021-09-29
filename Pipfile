@@ -18,6 +18,7 @@ django-cors-headers = "*"
 django-extensions = "*"
 django-debug-toolbar = "*"
 drf-nested-routers = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"

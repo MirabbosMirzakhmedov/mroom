@@ -39,7 +39,7 @@ def get_authorized_session(request: HttpRequest) -> Session:
     token: typing.Union[str, None] = request.COOKIES.get(
         settings.SESSION_COOKIE_NAME)
 
-    if token == None:
+    if not token:
         raise AuthorizationFailed()
 
     try:

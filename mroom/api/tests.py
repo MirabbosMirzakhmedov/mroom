@@ -1,6 +1,6 @@
 import datetime
 import json
-from typing import Dict
+from typing import Dict, List
 from unittest.mock import patch, Mock
 
 import requests
@@ -390,41 +390,47 @@ class TestSignin(TestCase):
         )
 
 
-class TestSignout(TestCase):
+class TestPrivateEndpoint(TestCase):
+    paths: List[str] = [
+        '/api/current_user/',
+        '/api/signout/',
+    ]
+
     def test_missing_token_cookie(self):
         client: APIClient = APIClient()
-        res = client.post(
-            path='/api/signout/',
-            content_type='application/json',
-        )
-        self.assertEqual(
-            res.status_code,
-            401
-        )
-        self.assertEqual(
-            res.json(),
-            {
-                'detail': 'Authorization cookie missing'
-            }
-        )
+        for path in self.paths:
+            res = client.post(
+                path=path,
+                content_type='application/json'
+            )
+            self.assertEqual(
+                res.status_code,
+                401
+            )
+            self.assertEqual(
+                res.json(),
+                {'detail': 'Authorization cookie missing'}
+            )
 
     def test_session_does_not_exist(self):
         client: APIClient = APIClient()
-        client.cookies[settings.SESSION_COOKIE_NAME] = 'test_cookie_token'
-        res = client.post(
-            path='/api/signout/',
-            content_type='application/json',
-        )
-        self.assertEqual(
-            res.status_code,
-            401
-        )
-        self.assertEqual(
-            res.json(),
-            {
-                'detail': 'Invalid session or inactive user'
-            }
-        )
+        client.cookies[
+            settings.SESSION_COOKIE_NAME
+        ] = 'test_cookie_token'
+
+        for path in self.paths:
+            res = client.post(
+                path=path,
+                content_type='application/json',
+            )
+            self.assertEqual(
+                res.status_code,
+                401
+            )
+            self.assertEqual(
+                res.json(),
+                {'detail': 'Invalid session or inactive user'}
+            )
 
     def test_session_expired(self):
         client: APIClient = APIClient()
@@ -443,21 +449,22 @@ class TestSignout(TestCase):
         )
         session.token = client.cookies[
             settings.SESSION_COOKIE_NAME
-        ] = '...'
-        res = client.post(
-            path='/api/signout/',
-            content_type='application/json',
-        )
-        self.assertEqual(
-            res.status_code,
-            401
-        )
-        self.assertEqual(
-            res.json(),
-            {
-                'detail': 'Invalid session or inactive user'
-            }
-        )
+        ] = session.token
+        session.last_active = timezone.now() - datetime.timedelta(days=400)
+        session.save()
+        for path in self.paths:
+            res = client.post(
+                path=path,
+                content_type='application/json',
+            )
+            self.assertEqual(
+                res.status_code,
+                401
+            )
+            self.assertEqual(
+                res.json(),
+                {'detail': 'Invalid session or inactive user'}
+            )
 
     def test_successful_signout(self):
         client: APIClient = APIClient()
@@ -489,77 +496,6 @@ class TestSignout(TestCase):
             ''
         )
 
-
-class TestCurrentUser(TestCase):
-    def test_missing_token_cookie(self):
-        client: APIClient = APIClient()
-        res = client.post(
-            path='/api/current_user/',
-            content_type='application/json',
-        )
-
-        self.assertEqual(
-            res.status_code,
-            401
-        )
-        self.assertEqual(
-            res.json(),
-            {
-                'detail': 'Authorization cookie missing'
-            }
-        )
-
-    def test_session_does_not_exist(self):
-        client: APIClient = APIClient()
-        client.cookies[settings.SESSION_COOKIE_NAME] = 'test_cookie_token'
-        res = client.post(
-            path='/api/current_user/',
-            content_type='application/json',
-        )
-        self.assertEqual(
-            res.status_code,
-            401
-        )
-        self.assertEqual(
-            res.json(),
-            {
-                'detail': 'Invalid session or inactive user'
-            }
-        )
-
-    def test_session_expired(self):
-        client: APIClient = APIClient()
-        user: User = User.objects.create_user(
-            email='new_email@gmail.com',
-            password='new_password',
-            name='Mirabbos',
-            terms=True,
-        )
-        session: Session = Session.objects.create(
-            last_active=datetime.datetime(
-                year=2021, month=9, day=10, hour=10,
-                minute=20, second=20, microsecond=20
-            ),
-            user=user,
-        )
-        session.token = client.cookies[
-            settings.SESSION_COOKIE_NAME
-        ] = '...'
-        res = client.post(
-            path='/api/current_user/',
-            content_type='application/json',
-        )
-        self.assertEqual(
-            res.status_code,
-            401
-        )
-        self.assertEqual(
-            res.json(),
-            {
-                'detail': 'Invalid session or inactive user'
-            }
-        )
-
     def test_get_current_user(self):
         client: APIClient = APIClient()
         user: User = User.objects.create_user(
@@ -575,7 +511,6 @@ class TestCurrentUser(TestCase):
         client.cookies[
             settings.SESSION_COOKIE_NAME
         ] = session.token
-
         res = client.get(
             path='/api/current_user/',
             content_type='application/json',
