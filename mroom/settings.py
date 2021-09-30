@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import datetime
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -105,10 +106,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SESSION_COOKIE_NAME = 'MROOM_SESSION'
+SESSION_COOKIE_NAME: str = 'MROOM_SESSION'
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 BIGMAILER_API_KEY = os.getenv('BIGMAILER_API_KEY')
 
 CAMPAIGN_ID = os.getenv('CAMPAIGN_ID')
+
+SESSION_DURATION = datetime.timedelta(days=365)

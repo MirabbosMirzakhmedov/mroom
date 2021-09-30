@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 class SignupSerializer(serializers.Serializer):
     name = serializers.CharField()
     email = serializers.EmailField()
@@ -9,8 +10,3 @@ class SignupSerializer(serializers.Serializer):
         min_length=8,
         required=True
     )
-
-class SigninSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    password = serializers.CharField(required=True)
-

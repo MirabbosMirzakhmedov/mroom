@@ -1,22 +1,29 @@
-import datetime
 import json
 import typing
-from django.db.models import QuerySet
 
 import requests
+from django.db.models import QuerySet
 from django.db.transaction import atomic
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from mroom import settings
+from mroom.api.authentication.api import PrivateAPIAuthentication
+from mroom.api.authentication.api import get_authorized_session
 from mroom.api.email.campaign import Signup
-from mroom.api.exceptions import ServiceUnavailable, AuthenticationFailed
+from mroom.api.exceptions import (
+    ServiceUnavailable,
+    AuthenticationFailed,
+)
 from mroom.api.models import User, Session
-from mroom.api.serializers import SignupSerializer, SigninSerializer
+from mroom.api.serializer.signin import SigninSerializer
+from mroom.api.serializer.signup import SignupSerializer
+from mroom.api.serializer.user import CurrentUserSerializer
 
 
 @api_view(['POST'])
@@ -109,7 +116,7 @@ def signin(request: HttpRequest) -> Response:
     user: User = user_query.first()
 
     if not user.check_password(
-        raw_password=serializer.data.get('password')
+            raw_password=serializer.data.get('password')
     ):
         raise AuthenticationFailed()
 
@@ -118,7 +125,7 @@ def signin(request: HttpRequest) -> Response:
     response: Response = Response()
     response.set_cookie(
         key=settings.SESSION_COOKIE_NAME,
-        expires=timezone.now() + datetime.timedelta(days=365 * 100),
+        expires=timezone.now() + settings.SESSION_DURATION,
         value=session.token,
         secure=True,
         httponly=True,
@@ -126,3 +133,30 @@ def signin(request: HttpRequest) -> Response:
     )
 
     return response
+
+
+@api_view(['POST'])
+def signout(request: HttpRequest) -> Response:
+    session: Session = get_authorized_session(
+        request=request
+    )
+
+    session.last_active = timezone.now()
+    session.is_active = False
+    session.save()
+
+    response: Response = Response()
+    response.delete_cookie(
+        settings.SESSION_COOKIE_NAME
+    )
+
+    return response
+
+
+class CurrentUserViewSet(viewsets.ViewSet):
+    authentication_classes = [PrivateAPIAuthentication]
+
+    def list(self, request: HttpRequest) -> Response:
+        return Response(
+            CurrentUserSerializer(instance=request.user).data
+        )

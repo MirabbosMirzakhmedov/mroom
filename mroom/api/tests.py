@@ -1,14 +1,16 @@
+import datetime
 import json
-from typing import Dict
+from typing import Dict, List
 from unittest.mock import patch, Mock
 
 import requests
 from django.test import TestCase
+from django.utils import timezone
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
 
 from mroom import settings
-from mroom.api.models import User
+from mroom.api.models import User, Session
 
 
 class TestSignup(TestCase):
@@ -384,5 +386,136 @@ class TestSignin(TestCase):
         )
         self.assertEqual(
             settings.SESSION_COOKIE_NAME in res.cookies,
+            True
+        )
+
+
+class TestPrivateEndpoint(TestCase):
+    paths: List[str] = [
+        '/api/current_user/',
+        '/api/signout/',
+    ]
+
+    def test_missing_token_cookie(self):
+        client: APIClient = APIClient()
+        for path in self.paths:
+            res = client.post(
+                path=path,
+                content_type='application/json'
+            )
+            self.assertEqual(
+                res.status_code,
+                401
+            )
+            self.assertEqual(
+                res.json(),
+                {'detail': 'Authorization cookie missing'}
+            )
+
+    def test_session_does_not_exist(self):
+        client: APIClient = APIClient()
+        client.cookies[
+            settings.SESSION_COOKIE_NAME
+        ] = 'test_cookie_token'
+
+        for path in self.paths:
+            res = client.post(
+                path=path,
+                content_type='application/json',
+            )
+            self.assertEqual(
+                res.status_code,
+                401
+            )
+            self.assertEqual(
+                res.json(),
+                {'detail': 'Invalid session or inactive user'}
+            )
+
+    def test_session_expired(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            email='new_email@gmail.com',
+            password='new_password',
+            name='Mirabbos',
+            terms=True,
+        )
+        session: Session = Session.objects.create(
+            user=user,
+        )
+        client.cookies[settings.SESSION_COOKIE_NAME] = session.token
+        session.last_active = timezone.now() - datetime.timedelta(days=400)
+        session.save()
+        for path in self.paths:
+            res = client.post(
+                path=path,
+                content_type='application/json',
+            )
+            self.assertEqual(
+                res.status_code,
+                401
+            )
+            self.assertEqual(
+                res.json(),
+                {'detail': 'Invalid session or inactive user'}
+            )
+
+    def test_successful_signout(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            email='new_email@gmail.com',
+            password='new_password',
+            name='Mirabbos',
+            terms=True,
+        )
+        session: Session = Session.objects.create(
+            user=user,
+        )
+        client.cookies[
+            settings.SESSION_COOKIE_NAME
+        ] = session.token
+        res = client.post(
+            path='/api/signout/',
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            200
+        )
+        self.assertEqual(
+            res.cookies[
+                settings.SESSION_COOKIE_NAME
+            ].value,
+            ''
+        )
+
+    def test_get_current_user(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            email='new_email@gmail.com',
+            password='new_password',
+            name='Mirabbos',
+            terms=True,
+        )
+        session: Session = Session.objects.create(
+            user=user,
+        )
+        client.cookies[
+            settings.SESSION_COOKIE_NAME
+        ] = session.token
+        res = client.get(
+            path='/api/current_user/',
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.status_code,
+            200
+        )
+        self.assertEqual(
+            len(res.data),
+            2
+        )
+        self.assertEqual(
+            'uid' and 'name' in res.data,
             True
         )
