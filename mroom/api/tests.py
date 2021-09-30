@@ -441,15 +441,9 @@ class TestPrivateEndpoint(TestCase):
             terms=True,
         )
         session: Session = Session.objects.create(
-            last_active=datetime.datetime(
-                year=2021, month=9, day=10, hour=10,
-                minute=20, second=20, microsecond=20
-            ),
             user=user,
         )
-        session.token = client.cookies[
-            settings.SESSION_COOKIE_NAME
-        ] = session.token
+        client.cookies[settings.SESSION_COOKIE_NAME] = session.token
         session.last_active = timezone.now() - datetime.timedelta(days=400)
         session.save()
         for path in self.paths:
@@ -475,7 +469,6 @@ class TestPrivateEndpoint(TestCase):
             terms=True,
         )
         session: Session = Session.objects.create(
-            last_active=timezone.now(),
             user=user,
         )
         client.cookies[
@@ -505,7 +498,6 @@ class TestPrivateEndpoint(TestCase):
             terms=True,
         )
         session: Session = Session.objects.create(
-            last_active=timezone.now(),
             user=user,
         )
         client.cookies[
