@@ -10,6 +10,7 @@ from mroom.api.views import (
     signin,
     signout,
     CurrentUserViewSet,
+    AppointmentViewSet,
 )
 
 viewsets: typing.List[typing.Dict] = [
@@ -17,6 +18,11 @@ viewsets: typing.List[typing.Dict] = [
         'prefix': r'api/current_user',
         'viewset': CurrentUserViewSet,
         'basename': 'current_user'
+    },
+    {
+        'prefix': r'api/appointment',
+        'viewset': AppointmentViewSet,
+        'basename': 'appointment'
     }
 ]
 
@@ -30,7 +36,6 @@ for viewset in viewsets:
     )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('api/signup/', signup),
     path('api/signin/', signin),
     path('api/signout/', signout),

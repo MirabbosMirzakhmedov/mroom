@@ -65,3 +65,13 @@ class Session(ProjectModel):
     last_active = models.DateTimeField(auto_now_add=True, db_index=True)
     is_active = models.BooleanField(default=True)
 
+
+class Appointment(ProjectModel):
+    full_name = models.CharField(max_length=255, null=False)
+    phone_number = models.CharField(null=False, max_length=20)
+    date = models.DateTimeField(auto_now_add=True, db_index=True)
+    barber = models.CharField(null=False, max_length=255)
+    message = models.TextField(null=True)
+
+
+
