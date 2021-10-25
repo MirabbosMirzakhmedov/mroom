@@ -519,3 +519,139 @@ class TestPrivateEndpoint(TestCase):
             'uid' and 'name' in res.data,
             True
         )
+
+
+class TestAppointment(TestCase):
+
+    def test_invalid_full_name(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': '',
+            'phone_number': '+3712008080',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {'full_name': ['This field may not be blank.']}
+
+        )
+
+    def test_invalid_date(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '+3712008080',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '10 April'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'date': [
+                    'Datetime has wrong format. '
+                    'Use one of these formats instead: '
+                    'YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
+                ]
+            }
+        )
+
+    def test_invalid_phone_number(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {'phone_number': ['This field may not be blank.']}
+
+        )
+
+    def test_phone_number_more_than_20(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '+1234 5678 1234 5678 9123 4',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'phone_number': [
+                    'Ensure this field has no more than 20 characters.'
+                ]
+            }
+        )
+
+    def test_appointment_successful(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '+3712008080',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            201
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'full_name': 'Alex Costa',
+                'phone_number': '+3712008080',
+                'date': '2021-10-26T02:17:00Z',
+                'barber': 'John Lewis',
+                'message': 'Your message'
+            }
+        )

@@ -69,7 +69,7 @@ class Session(ProjectModel):
 class Appointment(ProjectModel):
     full_name = models.CharField(max_length=255, null=False)
     phone_number = models.CharField(null=False, max_length=20)
-    date = models.DateTimeField(auto_now_add=True, db_index=True)
+    date = models.DateTimeField(db_index=True)
     barber = models.CharField(null=False, max_length=255)
     message = models.TextField(null=True)
 
