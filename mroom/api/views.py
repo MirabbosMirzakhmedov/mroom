@@ -11,7 +11,7 @@ from rest_framework import serializers
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+
 from mroom import settings
 from mroom.api.authentication.api import PrivateAPIAuthentication
 from mroom.api.authentication.api import get_authorized_session
@@ -23,7 +23,7 @@ from mroom.api.exceptions import (
 from mroom.api.models import (
     User,
     Session,
-    Appointment
+    Appointment,
 )
 from mroom.api.serializer.appointment import AppointmentSerializer
 from mroom.api.serializer.signin import SigninSerializer
@@ -165,7 +165,6 @@ class CurrentUserViewSet(viewsets.ViewSet):
         return Response(
             CurrentUserSerializer(instance=request.user).data
         )
-
 
 
 class AppointmentViewSet(viewsets.ModelViewSet):

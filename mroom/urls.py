@@ -11,6 +11,7 @@ from mroom.api.views import (
     signout,
     CurrentUserViewSet,
     AppointmentViewSet,
+    BarberViewSet,
 )
 
 viewsets: typing.List[typing.Dict] = [
@@ -23,6 +24,11 @@ viewsets: typing.List[typing.Dict] = [
         'prefix': r'api/appointment',
         'viewset': AppointmentViewSet,
         'basename': 'appointment'
+    },
+    {
+        'prefix': r'api/barber',
+        'viewset': BarberViewSet,
+        'basename': 'barber'
     }
 ]
 
