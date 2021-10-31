@@ -29,6 +29,7 @@ from mroom.api.serializer.appointment import AppointmentSerializer
 from mroom.api.serializer.signin import SigninSerializer
 from mroom.api.serializer.signup import SignupSerializer
 from mroom.api.serializer.user import CurrentUserSerializer
+from mroom.api.serializer.barber import BarberSerializer
 
 
 @api_view(['POST'])
@@ -171,3 +172,19 @@ class CurrentUserViewSet(viewsets.ViewSet):
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+
+class BarberViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = BarberSerializer
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

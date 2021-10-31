@@ -47,7 +47,7 @@ class User(AbstractBaseUser, ProjectModel):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, null=False, default=str)
     terms = models.BooleanField(default=False)
-
+    is_barber = models.BooleanField(default=False)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

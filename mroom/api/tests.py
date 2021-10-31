@@ -655,3 +655,29 @@ class TestAppointment(TestCase):
                 'message': 'Your message'
             }
         )
+
+class TestBarber(TestCase):
+    def test(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'name': 'Alex Costa',
+            'uid': 'c7d7766b-53e2-4b76-85c4-a53215d4ab8e',
+        }
+        res = client.post(
+            path='/api/barber/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            201
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'name': payload['name'],
+                'uid': payload['uid'],
+            }
+        )
+        # print(res.status_code)
+        # print(res.json())
