@@ -523,7 +523,7 @@ class TestPrivateEndpoint(TestCase):
 
 class TestAppointment(TestCase):
 
-    def test_invalid_full_name(self):
+    def test_empty_full_name(self):
         client: APIClient = APIClient()
         payload: Dict = {
             'full_name': '',
@@ -547,36 +547,7 @@ class TestAppointment(TestCase):
 
         )
 
-    def test_invalid_date(self):
-        client: APIClient = APIClient()
-        payload: Dict = {
-            'full_name': 'Alex Costa',
-            'phone_number': '+3712008080',
-            'barber': 'John Lewis',
-            'message': 'Your message',
-            'date': '10 April'
-        }
-        res = client.post(
-            path='/api/appointment/',
-            data=json.dumps(payload),
-            content_type='application/json'
-        )
-        self.assertEqual(
-            res.status_code,
-            400
-        )
-        self.assertEqual(
-            res.json(),
-            {
-                'date': [
-                    'Datetime has wrong format. '
-                    'Use one of these formats instead: '
-                    'YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].'
-                ]
-            }
-        )
-
-    def test_invalid_phone_number(self):
+    def test_empty_phone_number(self):
         client: APIClient = APIClient()
         payload: Dict = {
             'full_name': 'Alex Costa',
@@ -600,11 +571,11 @@ class TestAppointment(TestCase):
 
         )
 
-    def test_phone_number_more_than_20(self):
+    def test_phone_number_min_length(self):
         client: APIClient = APIClient()
         payload: Dict = {
             'full_name': 'Alex Costa',
-            'phone_number': '+1234 5678 1234 5678 9123 4',
+            'phone_number': '+20030',
             'barber': 'John Lewis',
             'message': 'Your message',
             'date': '2021-10-26T02:17'
@@ -615,16 +586,41 @@ class TestAppointment(TestCase):
             content_type='application/json'
         )
         self.assertEqual(
+            res.json(),
+            {'phone_number': [
+                'Must be without spaces and '
+                'cannot have more less than 9 and more than 15 characters.']
+            }
+        )
+        self.assertEqual(
             res.status_code,
             400
         )
+
+    def test_phone_number_with_spaces(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '+371 200 30 700',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
         self.assertEqual(
             res.json(),
-            {
-                'phone_number': [
-                    'Ensure this field has no more than 20 characters.'
-                ]
+            {'phone_number': [
+                'Must be without spaces and '
+                'cannot have more less than 9 and more than 15 characters.']
             }
+        )
+        self.assertEqual(
+            res.status_code,
+            400
         )
 
     def test_appointment_successful(self):

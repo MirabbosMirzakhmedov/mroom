@@ -166,7 +166,6 @@ class CurrentUserViewSet(viewsets.ViewSet):
             CurrentUserSerializer(instance=request.user).data
         )
 
-
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
