@@ -656,28 +656,33 @@ class TestAppointment(TestCase):
             }
         )
 
+
 class TestBarber(TestCase):
-    def test(self):
+    def test_get_list_of_barbers(self):
         client: APIClient = APIClient()
-        payload: Dict = {
-            'name': 'Alex Costa',
-            'uid': 'c7d7766b-53e2-4b76-85c4-a53215d4ab8e',
-        }
-        res = client.post(
-            path='/api/barber/',
-            data=json.dumps(payload),
-            content_type='application/json'
+        user: User = User.objects.create_user(
+            email='new_email@gmail.com',
+            name='Mirabbos',
+            terms=True,
+            password='barber_password',
         )
-        self.assertEqual(
-            res.status_code,
-            201
+
+        user.is_barber = True
+        user.save()
+        res = client.get(
+            path='/api/barber/',
+            content_type='application/json',
         )
         self.assertEqual(
             res.json(),
-            {
-                'name': payload['name'],
-                'uid': payload['uid'],
-            }
+            [{
+                'uid': 'af8da77f-ef49-48b0-ad2c-1277ebbd6c8b',
+                'name': 'Mirabbos'
+            }]
         )
-        # print(res.status_code)
-        # print(res.json())
+        self.assertEqual(
+            res.status_code,
+            200
+        )
+
+    # failing test here
