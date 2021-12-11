@@ -543,7 +543,7 @@ class TestAppointment(TestCase):
         )
         self.assertEqual(
             res.json(),
-            {'full_name': ['This field may not be blank.']}
+            {'name': ['This field is required.']}
 
         )
 
@@ -567,8 +567,14 @@ class TestAppointment(TestCase):
         )
         self.assertEqual(
             res.json(),
-            {'phone_number': ['This field may not be blank.']}
-
+            {
+                'name': [
+                    'This field is required.'
+                ],
+                'phone_number': [
+                    'This field may not be blank.'
+                ]
+            }
         )
 
     def test_phone_number_min_length(self):
@@ -587,9 +593,13 @@ class TestAppointment(TestCase):
         )
         self.assertEqual(
             res.json(),
-            {'phone_number': [
-                'Must be without spaces and '
-                'cannot have more less than 9 and more than 15 characters.']
+            {
+                "name": [
+                    "This field is required."
+                ],
+                "phone_number": [
+                    "Phone number must be between 9, 15 letters and cannot have blank spaces."
+                ]
             }
         )
         self.assertEqual(
@@ -613,10 +623,15 @@ class TestAppointment(TestCase):
         )
         self.assertEqual(
             res.json(),
-            {'phone_number': [
-                'Must be without spaces and '
-                'cannot have more less than 9 and more than 15 characters.']
+            {
+                "name": [
+                    "This field is required."
+                ],
+                "phone_number": [
+                    "Phone number must be between 9, 15 letters and cannot have blank spaces."
+                ]
             }
+
         )
         self.assertEqual(
             res.status_code,
@@ -626,7 +641,7 @@ class TestAppointment(TestCase):
     def test_appointment_successful(self):
         client: APIClient = APIClient()
         payload: Dict = {
-            'full_name': 'Alex Costa',
+            'name': 'Alex Costa',
             'phone_number': '+3712008080',
             'barber': 'John Lewis',
             'message': 'Your message',
@@ -644,10 +659,10 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'full_name': 'Alex Costa',
-                'phone_number': '+3712008080',
-                'date': '2021-10-26T02:17:00Z',
-                'barber': 'John Lewis',
-                'message': 'Your message'
+                "name": "Alex Costa",
+                "phone_number": "+3712008080",
+                "date": "2021-10-26T02:17:00Z",
+                "barber": "John Lewis",
+                "message": "Your message"
             }
         )

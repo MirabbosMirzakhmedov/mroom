@@ -62,11 +62,11 @@ class Session(ProjectModel):
     )
     token = models.TextField(default=gen_session_token, unique=True)
     last_active = models.DateTimeField(auto_now_add=True, db_index=True)
-    is_active = models.BooleanField(default=True)
+
 
 
 class Appointment(ProjectModel):
-    full_name = models.CharField(max_length=255, null=False)
+    name = models.CharField(max_length=255, null=False)
     phone_number = models.CharField(null=False, max_length=20)
     date = models.DateTimeField(db_index=True)
     barber = models.CharField(null=False, max_length=255)
