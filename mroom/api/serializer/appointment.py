@@ -4,7 +4,8 @@ from mroom.api.models import Appointment
 
 class PhoneNumberField(serializers.RegexField):
     default_error_messages = {
-        'invalid': 'Phone number must be between 9, 15 letters and cannot have blank spaces.'
+        'invalid': 'Phone number must be between '
+                   '9 - 15 digits and cannot have blank spaces.'
     }
 
 class AppointmentSerializer(serializers.ModelSerializer):
