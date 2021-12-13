@@ -661,12 +661,10 @@ class TestBarber(TestCase):
     def test_get_list_of_barbers(self):
         client: APIClient = APIClient()
         user: User = User.objects.create_user(
-            email='new_email@gmail.com',
-            name='Mirabbos',
-            terms=True,
-            password='barber_password',
+            name='Alexis',
+            email='alexis_barber@gmail.com',
+            terms=True
         )
-
         user.is_barber = True
         user.save()
         res = client.get(
@@ -676,8 +674,8 @@ class TestBarber(TestCase):
         self.assertEqual(
             res.json(),
             [{
-                'uid': 'af8da77f-ef49-48b0-ad2c-1277ebbd6c8b',
-                'name': 'Mirabbos'
+                'uid': 'cd5751f4-50b9-4db6-80d8-7b36547bd77b',
+                'name': 'Alexis'
             }]
         )
         self.assertEqual(
@@ -685,4 +683,24 @@ class TestBarber(TestCase):
             200
         )
 
-    # failing test here
+    def test_failing_test(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            name='Sonia',
+            email='sonia_user@gmail.com',
+            terms=True
+        )
+        user.is_barber = False
+        user.save()
+        res = client.get(
+            path='/api/barber/',
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.json(),
+            []
+        )
+        self.assertEqual(
+            res.status_code,
+            200
+        )

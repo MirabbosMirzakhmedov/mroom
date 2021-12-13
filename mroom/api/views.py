@@ -174,6 +174,5 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
 
 class BarberViewSet(viewsets.ModelViewSet):
-    # Figure out how to get only barbers, not all users.
-    queryset = User.objects.all()
+    queryset = User.objects.all().filter(is_barber=True)
     serializer_class = BarberSerializer
