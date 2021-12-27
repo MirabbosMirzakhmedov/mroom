@@ -2,13 +2,13 @@ import datetime
 import json
 from typing import Dict, List
 from unittest.mock import patch, Mock
-
+from datetime import datetime
 import requests
 from django.test import TestCase
 from django.utils import timezone
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
-
+from datetime import timedelta
 from mroom import settings
 from mroom.api.models import User, Session
 
@@ -444,7 +444,7 @@ class TestPrivateEndpoint(TestCase):
             user=user,
         )
         client.cookies[settings.SESSION_COOKIE_NAME] = session.token
-        session.last_active = timezone.now() - datetime.timedelta(days=400)
+        session.last_active = timezone.now() - timedelta(days=400)
         session.save()
         for path in self.paths:
             res = client.post(
@@ -543,7 +543,10 @@ class TestAppointment(TestCase):
         )
         self.assertEqual(
             res.json(),
-            {'name': ['This field is required.']}
+            {
+                'name': ['This field is required.'],
+                'date': ['Cannot insert date in the past']
+            }
 
         )
 
@@ -568,11 +571,14 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': [
-                    'This field is required.'
+                "name": [
+                    "This field is required."
                 ],
-                'phone_number': [
-                    'This field may not be blank.'
+                "phone_number": [
+                    "This field may not be blank."
+                ],
+                "date": [
+                    "Cannot insert date in the past"
                 ]
             }
         )
@@ -598,7 +604,10 @@ class TestAppointment(TestCase):
                     "This field is required."
                 ],
                 "phone_number": [
-                    "Phone number must be between 9, 15 letters and cannot have blank spaces."
+                    "Phone number must be between 9 - 15 digits and cannot have blank spaces."
+                ],
+                "date": [
+                    "Cannot insert date in the past"
                 ]
             }
         )
@@ -624,14 +633,16 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "name": [
-                    "This field is required."
+                'name': [
+                    'This field is required.'
                 ],
-                "phone_number": [
-                    "Phone number must be between 9, 15 letters and cannot have blank spaces."
+                'phone_number': [
+                    'Phone number must be between 9 - 15 digits and cannot have blank spaces.'
+                ],
+                'date': [
+                    'Cannot insert date in the past'
                 ]
             }
-
         )
         self.assertEqual(
             res.status_code,
@@ -645,7 +656,7 @@ class TestAppointment(TestCase):
             'phone_number': '+3712008080',
             'barber': 'John Lewis',
             'message': 'Your message',
-            'date': '2021-10-26T02:17'
+            'date': '2022-10-27T10:01'
         }
         res = client.post(
             path='/api/appointment/',
@@ -661,7 +672,7 @@ class TestAppointment(TestCase):
             {
                 "name": "Alex Costa",
                 "phone_number": "+3712008080",
-                "date": "2021-10-26T02:17:00Z",
+                "date": "2022-10-27T10:01",
                 "barber": "John Lewis",
                 "message": "Your message"
             }
