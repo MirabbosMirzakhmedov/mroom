@@ -1,14 +1,14 @@
-import datetime
 import json
+from datetime import timedelta
 from typing import Dict, List
 from unittest.mock import patch, Mock
-from datetime import datetime
+
 import requests
 from django.test import TestCase
 from django.utils import timezone
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
-from datetime import timedelta
+
 from mroom import settings
 from mroom.api.models import User, Session
 
