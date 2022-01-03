@@ -10,7 +10,6 @@ from mroom.api.views import (
     signin,
     signout,
     CurrentUserViewSet,
-    AppointmentViewSet,
     BarberViewSet
 )
 
@@ -19,11 +18,6 @@ viewsets: typing.List[typing.Dict] = [
         'prefix': r'api/current_user',
         'viewset': CurrentUserViewSet,
         'basename': 'current_user'
-    },
-    {
-        'prefix': r'api/appointment',
-        'viewset': AppointmentViewSet,
-        'basename': 'appointment'
     },
     {
         'prefix': r'api/barber',
