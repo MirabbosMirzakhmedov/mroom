@@ -8,7 +8,7 @@ class TestQuestionOne(unittest.TestCase):
 
     def test_answer_very_short(self):
         actual_result: str = Question(
-            "Very short"
+            'Very short'
         ).get_how_long_hair_do_you_have_answer()
 
         expected_result: str = TestTexts.ANSWER_VERY_SHORT
@@ -17,7 +17,7 @@ class TestQuestionOne(unittest.TestCase):
 
     def test_answer_short(self):
         actual_result: str = Question(
-            "Short"
+            'Short'
         ).get_how_long_hair_do_you_have_answer()
 
         expected_result: str = TestTexts.ANSWER_SHORT
@@ -26,7 +26,7 @@ class TestQuestionOne(unittest.TestCase):
 
     def test_answer_medium(self):
         actual_result: str = Question(
-            "Medium"
+            'Medium'
         ).get_how_long_hair_do_you_have_answer()
 
         expected_result: str = TestTexts.ANSWER_MEDIUM
@@ -35,7 +35,7 @@ class TestQuestionOne(unittest.TestCase):
 
     def test_answer_long(self):
         actual_result: str = Question(
-            "Long"
+            'Long'
         ).get_how_long_hair_do_you_have_answer()
 
         expected_result: str = TestTexts.ANSWER_LONG

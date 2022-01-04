@@ -1,5 +1,5 @@
-import datetime
 import json
+from datetime import timedelta
 from typing import Dict, List
 from unittest.mock import patch, Mock
 
@@ -444,7 +444,7 @@ class TestPrivateEndpoint(TestCase):
             user=user,
         )
         client.cookies[settings.SESSION_COOKIE_NAME] = session.token
-        session.last_active = timezone.now() - datetime.timedelta(days=400)
+        session.last_active = timezone.now() - timedelta(days=400)
         session.save()
         for path in self.paths:
             res = client.post(
@@ -518,4 +518,164 @@ class TestPrivateEndpoint(TestCase):
         self.assertEqual(
             'uid' and 'name' in res.data,
             True
+        )
+
+
+class TestAppointment(TestCase):
+
+    def test_empty_full_name(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': '',
+            'phone_number': '+3712008080',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'name': ['This field is required.'],
+                'date': ['Cannot insert date in the past.']
+            }
+
+        )
+
+    def test_empty_phone_number(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'name': [
+                    'This field is required.'
+                ],
+                'phone_number': [
+                    'This field may not be blank.'
+                ],
+                'date': [
+                    'Cannot insert date in the past.'
+                ]
+            }
+        )
+
+    def test_phone_number_min_length(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '+20030',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'name': [
+                    'This field is required.'
+                ],
+                'phone_number': [
+                    'Phone number must be between 9 - 15 '
+                    'digits and cannot have blank spaces.'
+                ],
+                'date': [
+                    'Cannot insert date in the past.'
+                ]
+            }
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+
+    def test_phone_number_with_spaces(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'full_name': 'Alex Costa',
+            'phone_number': '+371 200 30 700',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2021-10-26T02:17'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'name': [
+                    'This field is required.'
+                ],
+                'phone_number': [
+                    'Phone number must be between 9 - 15 '
+                    'digits and cannot have blank spaces.'
+                ],
+                'date': [
+                    'Cannot insert date in the past.'
+                ]
+            }
+        )
+        self.assertEqual(
+            res.status_code,
+            400
+        )
+
+    def test_appointment_successful(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'name': 'Alex Costa',
+            'phone_number': '+3712008080',
+            'barber': 'John Lewis',
+            'message': 'Your message',
+            'date': '2022-10-27T10:01'
+        }
+        res = client.post(
+            path='/api/appointment/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(
+            res.status_code,
+            201
+        )
+        self.assertEqual(
+            res.json(),
+            {
+                'name': 'Alex Costa',
+                'phone_number': '+3712008080',
+                'date': '2022-10-27T10:01',
+                'barber': 'John Lewis',
+                'message': 'Your message'
+            }
         )

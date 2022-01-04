@@ -20,7 +20,12 @@ from mroom.api.exceptions import (
     ServiceUnavailable,
     AuthenticationFailed,
 )
-from mroom.api.models import User, Session
+from mroom.api.models import (
+    User,
+    Session,
+    Appointment,
+)
+from mroom.api.serializer.appointment import AppointmentSerializer
 from mroom.api.serializer.signin import SigninSerializer
 from mroom.api.serializer.signup import SignupSerializer
 from mroom.api.serializer.user import CurrentUserSerializer
@@ -160,3 +165,7 @@ class CurrentUserViewSet(viewsets.ViewSet):
         return Response(
             CurrentUserSerializer(instance=request.user).data
         )
+
+class AppointmentViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
