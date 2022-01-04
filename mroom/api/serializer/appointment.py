@@ -20,7 +20,7 @@ class DateField(serializers.Field):
     def to_internal_value(self, date):
         time_now = datetime.now()
 
-        if date == '':
+        if not date:
             raise serializers.ValidationError(
                 'This field may not be blank.'
             )
