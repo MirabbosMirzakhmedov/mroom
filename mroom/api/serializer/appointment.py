@@ -19,11 +19,17 @@ class DateField(serializers.Field):
 
     def to_internal_value(self, date):
         time_now = datetime.now()
-        datetime_object = datetime.strptime(date, "%Y-%m-%dT%H:%M")
+
+        if date == '':
+            raise serializers.ValidationError(
+                'This field may not be blank.'
+            )
+
+        datetime_object = datetime.strptime(date, '%Y-%m-%dT%H:%M')
 
         if time_now > datetime_object:
             raise serializers.ValidationError(
-                'Cannot insert date in the past'
+                'Cannot insert date in the past.'
             )
 
         return date

@@ -8,34 +8,34 @@ from report.texts import Text
 
 
 class Answers:
-    VERY_SHORT = "Very short"
-    SHORT = "Short"
-    MEDIUM = "Medium"
-    LONG = "Long"
+    VERY_SHORT = 'Very short'
+    SHORT = 'Short'
+    MEDIUM = 'Medium'
+    LONG = 'Long'
 
-    EVERYDAY = "Everyday"
-    TWO_TIMES = "2 times a week"
-    ONE_TIME = "1 time a week"
-    THREE_TIMES = "3 times a week"
+    EVERYDAY = 'Everyday'
+    TWO_TIMES = '2 times a week'
+    ONE_TIME = '1 time a week'
+    THREE_TIMES = '3 times a week'
 
-    DANDRUFF = "Dandruff"
-    HAIR_LOSS = "Hair loss"
-    DRY_HAIR = "Dry hair"
-    PSORIASIS = "Psoriasis"
-    HEAD_LICE = "Head lice"
-    BAMBOO_HAIR = "Bamboo hair"
-    VERY_OILY_HAIR = "Very oily hair"
+    DANDRUFF = 'Dandruff'
+    HAIR_LOSS = 'Hair loss'
+    DRY_HAIR = 'Dry hair'
+    PSORIASIS = 'Psoriasis'
+    HEAD_LICE = 'Head lice'
+    BAMBOO_HAIR = 'Bamboo hair'
+    VERY_OILY_HAIR = 'Very oily hair'
 
-    EUR = "Eur"
-    USD = "USD"
+    EUR = 'Eur'
+    USD = 'USD'
     price_120 = 120
     price_265 = 265
     price_60 = 60
     price_132 = 132
 
-    YES = "Yes"
+    YES = 'Yes'
     IDK = "I don't know"
-    NO = "No"
+    NO = 'No'
 
 
 class Question:
@@ -51,7 +51,7 @@ class Question:
             self.currency = self.answer.get('currency')
             self.price = self.answer.get('price')
             self.answer_choice = self.answer.get('choice')
-            self.answer_yes_choices = self.answer.get("yes_choices")
+            self.answer_yes_choices = self.answer.get('yes_choices')
 
     # FIRST QUESTION
     def get_how_long_hair_do_you_have_answer(self):
@@ -155,15 +155,15 @@ class Question:
 
         if (
                 self.answer_choice == Answers.YES and
-                "Applying lemon" in self.answer_yes_choices and
-                "Applying garlic water" in self.answer_yes_choices
+                'Applying lemon' in self.answer_yes_choices and
+                'Applying garlic water' in self.answer_yes_choices
         ):
             return self.text.ANSWER_YES_lemon_garlicwater
 
         if (
                 self.answer_choice == Answers.YES and
-                "Applying Aloe liquid" in self.answer_yes_choices and
-                "Do not washing" in self.answer_yes_choices
+                'Applying Aloe liquid' in self.answer_yes_choices and
+                'Do not washing' in self.answer_yes_choices
         ):
             return self.text.ANSWER_YES_aloe_not_washing
 

@@ -545,7 +545,7 @@ class TestAppointment(TestCase):
             res.json(),
             {
                 'name': ['This field is required.'],
-                'date': ['Cannot insert date in the past']
+                'date': ['Cannot insert date in the past.']
             }
 
         )
@@ -571,14 +571,14 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "name": [
-                    "This field is required."
+                'name': [
+                    'This field is required.'
                 ],
-                "phone_number": [
-                    "This field may not be blank."
+                'phone_number': [
+                    'This field may not be blank.'
                 ],
-                "date": [
-                    "Cannot insert date in the past"
+                'date': [
+                    'Cannot insert date in the past.'
                 ]
             }
         )
@@ -600,15 +600,15 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "name": [
-                    "This field is required."
+                'name': [
+                    'This field is required.'
                 ],
-                "phone_number": [
-                    "Phone number must be between 9 - 15 "
-                    "digits and cannot have blank spaces."
+                'phone_number': [
+                    'Phone number must be between 9 - 15 '
+                    'digits and cannot have blank spaces.'
                 ],
-                "date": [
-                    "Cannot insert date in the past"
+                'date': [
+                    'Cannot insert date in the past.'
                 ]
             }
         )
@@ -642,7 +642,7 @@ class TestAppointment(TestCase):
                     'digits and cannot have blank spaces.'
                 ],
                 'date': [
-                    'Cannot insert date in the past'
+                    'Cannot insert date in the past.'
                 ]
             }
         )
@@ -672,10 +672,10 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                "name": "Alex Costa",
-                "phone_number": "+3712008080",
-                "date": "2022-10-27T10:01",
-                "barber": "John Lewis",
-                "message": "Your message"
+                'name': 'Alex Costa',
+                'phone_number': '+3712008080',
+                'date': '2022-10-27T10:01',
+                'barber': 'John Lewis',
+                'message': 'Your message'
             }
         )

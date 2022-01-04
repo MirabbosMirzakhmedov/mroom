@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+'''Django's command-line utility for administrative tasks.'''
 import os
 import sys
 
@@ -8,7 +8,7 @@ load_dotenv(find_dotenv(filename='mroom.env', raise_error_if_not_found=True))
 
 
 def main():
-    """Run administrative tasks."""
+    '''Run administrative tasks.'''
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mroom.settings')
     try:
         from django.core.management import execute_from_command_line

@@ -11,8 +11,8 @@ class TestQuestionFour(unittest.TestCase):
 
         actual_result = Question(
                 {
-                    "price": test_price,
-                    "currency": "Eur",
+                    'price': test_price,
+                    'currency': 'Eur',
                 }
             ).get_whats_the_price_for_your_shampoo_answer()
 
@@ -28,8 +28,8 @@ class TestQuestionFour(unittest.TestCase):
 
         actual_result = Question(
                 {
-                    "price": test_price,
-                    "currency": "USD",
+                    'price': test_price,
+                    'currency': 'USD',
                 }
             ).get_whats_the_price_for_your_shampoo_answer()
 
@@ -44,8 +44,8 @@ class TestQuestionFour(unittest.TestCase):
 
         actual_result = Question(
                 {
-                    "price": test_price,
-                    "currency": "Eur",
+                    'price': test_price,
+                    'currency': 'Eur',
                 }
             ).get_whats_the_price_for_your_shampoo_answer()
 
@@ -60,8 +60,8 @@ class TestQuestionFour(unittest.TestCase):
 
         actual_result = Question(
                 {
-                    "price": test_price,
-                    "currency": "USD",
+                    'price': test_price,
+                    'currency': 'USD',
                 }
             ).get_whats_the_price_for_your_shampoo_answer()
 
@@ -72,13 +72,13 @@ class TestQuestionFour(unittest.TestCase):
 
     def test_answer_any_other_case(self):
         test_price: int = 100
-        test_currency: str = "PRC"
+        test_currency: str = 'PRC'
         # Optional condition to check the last option
 
         actual_result = Question(
                 {
-                    "price": test_price,
-                    "currency": test_currency,
+                    'price': test_price,
+                    'currency': test_currency,
                 }
             ).get_whats_the_price_for_your_shampoo_answer()
 
