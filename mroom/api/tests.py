@@ -604,7 +604,8 @@ class TestAppointment(TestCase):
                     "This field is required."
                 ],
                 "phone_number": [
-                    "Phone number must be between 9 - 15 digits and cannot have blank spaces."
+                    "Phone number must be between 9 - 15 "
+                    "digits and cannot have blank spaces."
                 ],
                 "date": [
                     "Cannot insert date in the past"
@@ -637,7 +638,8 @@ class TestAppointment(TestCase):
                     'This field is required.'
                 ],
                 'phone_number': [
-                    'Phone number must be between 9 - 15 digits and cannot have blank spaces.'
+                    'Phone number must be between 9 - 15 '
+                    'digits and cannot have blank spaces.'
                 ],
                 'date': [
                     'Cannot insert date in the past'
