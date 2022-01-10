@@ -56,7 +56,6 @@ class User(AbstractBaseUser, ProjectModel):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-
 class Session(ProjectModel):
     user = models.ForeignKey(
         to=User,
@@ -80,5 +79,16 @@ class Appointment(ProjectModel):
         on_delete=models.CASCADE,
         related_name='appointments'
     )
+
+
+
+
+class Appointment(ProjectModel):
+    name = models.CharField(max_length=255, null=False)
+    phone_number = models.CharField(null=False, max_length=20)
+    date = models.DateTimeField(db_index=True)
+    barber = models.CharField(null=False, max_length=255)
+    message = models.TextField(null=True)
+
 
 

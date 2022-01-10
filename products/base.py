@@ -1,5 +1,5 @@
-# from typing import Dict, List
-# import requests
+from typing import Dict, List
+import requests
 #
 # class ProductRequest:
 #
@@ -95,6 +95,7 @@
 #     amount=5
 # ).get()
 #
+
 with open(
         'D:\Python Mentorship\module_5\project_exercise\products_list.txt',
         'w') as f:

@@ -8,9 +8,9 @@ class TestQuestionThree(unittest.TestCase):
 
     def test_answer_dandruff_dry_hair_psoriasis(self):
         actual_result: str = Question(
-            ["Dandruff",
-             "Dry hair",
-             "Psoriasis"]
+            ['Dandruff',
+             'Dry hair',
+             'Psoriasis']
         ).get_what_kind_of_problems_do_you_have_answer()
 
         expected_result: str = TestTexts.QUESTION_3_ANSWER_1
@@ -19,8 +19,8 @@ class TestQuestionThree(unittest.TestCase):
 
     def test_answer_head_lice_psoriasis(self):
         actual_result: str = Question(
-            ["Head lice",
-             "Psoriasis"]
+            ['Head lice',
+             'Psoriasis']
         ).get_what_kind_of_problems_do_you_have_answer()
 
         expected_result: str = TestTexts.QUESTION_3_ANSWER_2
@@ -29,9 +29,9 @@ class TestQuestionThree(unittest.TestCase):
 
     def test_answer_very_oily_hair_dry_hair_dandruff(self):
         actual_result: str = Question(
-            ["Very oily hair",
-             "Dry hair",
-             "Dandruff"]
+            ['Very oily hair',
+             'Dry hair',
+             'Dandruff']
         ).get_what_kind_of_problems_do_you_have_answer()
 
         expected_result: str = TestTexts.QUESTION_3_ANSWER_3
@@ -40,7 +40,7 @@ class TestQuestionThree(unittest.TestCase):
 
     def test_answer_bamboo_hair(self):
         actual_result = Question(
-            ["Bamboo hair"]
+            ['Bamboo hair']
         ).get_what_kind_of_problems_do_you_have_answer()
 
         expected_result: str = TestTexts.QUESTION_3_ANSWER_3_else

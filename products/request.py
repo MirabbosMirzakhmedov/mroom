@@ -17,7 +17,7 @@ class ProductRequest:
     def get(self, params: Dict) -> requests.Response:
         return requests.get(
             url=self.url,
-            header=self.headers,
+            headers=self.headers,
             timeout=self.timeout,
             params=params
         )

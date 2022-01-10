@@ -1,6 +1,5 @@
 import debug_toolbar
 from django.conf import settings
-from django.contrib import admin
 from django.urls import path, include
 from rest_framework_nested.routers import SimpleRouter
 import typing
@@ -10,7 +9,8 @@ from mroom.api.views import (
     signin,
     signout,
     CurrentUserViewSet,
-    BarberViewSet
+    BarberViewSet,
+    AppointmentViewSet,
 )
 
 viewsets: typing.List[typing.Dict] = [
@@ -18,6 +18,11 @@ viewsets: typing.List[typing.Dict] = [
         'prefix': r'api/current_user',
         'viewset': CurrentUserViewSet,
         'basename': 'current_user'
+    },
+    {
+        'prefix': r'api/appointment',
+        'viewset': AppointmentViewSet,
+        'basename': 'appointment'
     },
     {
         'prefix': r'api/barber',
