@@ -72,8 +72,13 @@ class Appointment(ProjectModel):
     name = models.CharField(max_length=255, null=False)
     phone_number = models.CharField(null=False, max_length=20)
     date = models.DateTimeField(db_index=True)
-    barber = models.CharField(null=False, max_length=255)
     message = models.TextField(null=True)
+    # barber = models.CharField(null=False, max_length=255)
 
+    barber = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='appointments'
+    )
 
 

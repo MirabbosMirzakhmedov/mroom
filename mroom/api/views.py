@@ -167,5 +167,5 @@ class CurrentUserViewSet(viewsets.ViewSet):
 
 
 class BarberViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().filter(is_barber=True)
+    queryset = User.objects.filter(is_barber=True)
     serializer_class = BarberSerializer
