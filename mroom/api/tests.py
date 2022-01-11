@@ -493,7 +493,6 @@ class TestPrivateEndpoint(TestCase):
         client: APIClient = APIClient()
         user: User = User.objects.create_user(
             email='new_email@gmail.com',
-            password='new_password',
             name='Mirabbos',
             terms=True,
         )
@@ -503,6 +502,7 @@ class TestPrivateEndpoint(TestCase):
         client.cookies[
             settings.SESSION_COOKIE_NAME
         ] = session.token
+
         res = client.get(
             path='/api/current_user/',
             content_type='application/json',
@@ -519,6 +519,7 @@ class TestPrivateEndpoint(TestCase):
             'uid' and 'name' in res.data,
             True
         )
+
 
 class TestBarber(TestCase):
     def test_get_list_of_barbers(self):
@@ -572,10 +573,17 @@ class TestBarber(TestCase):
 class TestAppointment(TestCase):
     def test_empty_full_name(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': '',
+            'name': '',
             'phone_number': '+3712008080',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -591,18 +599,24 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': ['This field is required.'],
+                'name': ['This field may not be blank.'],
                 'date': ['Cannot insert date in the past.']
             }
-
         )
 
     def test_empty_phone_number(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': 'Alex Costa',
+            'name': 'John Lewis',
             'phone_number': '',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -618,24 +632,24 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': [
-                    'This field is required.'
-                ],
-                'phone_number': [
-                    'This field may not be blank.'
-                ],
-                'date': [
-                    'Cannot insert date in the past.'
-                ]
+                'phone_number': ['This field may not be blank.'],
+                'date': ['Cannot insert date in the past.']
             }
         )
 
     def test_phone_number_min_length(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': 'Alex Costa',
+            'name': 'Alex Costa',
             'phone_number': '+20030',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -647,9 +661,6 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': [
-                    'This field is required.'
-                ],
                 'phone_number': [
                     'Phone number must be between 9 - 15 '
                     'digits and cannot have blank spaces.'
@@ -666,10 +677,17 @@ class TestAppointment(TestCase):
 
     def test_phone_number_with_spaces(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': 'Alex Costa',
+            'name': 'Alex Costa',
             'phone_number': '+371 200 30 700',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -681,16 +699,11 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': [
-                    'This field is required.'
-                ],
                 'phone_number': [
                     'Phone number must be between 9 - 15 '
                     'digits and cannot have blank spaces.'
                 ],
-                'date': [
-                    'Cannot insert date in the past.'
-                ]
+                'date': ['Cannot insert date in the past.']
             }
         )
         self.assertEqual(
@@ -700,10 +713,17 @@ class TestAppointment(TestCase):
 
     def test_appointment_successful(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
             'name': 'Alex Costa',
             'phone_number': '+3712008080',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2022-10-27T10:01'
         }
@@ -722,7 +742,7 @@ class TestAppointment(TestCase):
                 'name': 'Alex Costa',
                 'phone_number': '+3712008080',
                 'date': '2022-10-27T10:01',
-                'barber': 'John Lewis',
+                'barber': str(barber.uid),
                 'message': 'Your message'
             }
         )

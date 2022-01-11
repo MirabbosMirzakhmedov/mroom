@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import datetime
-
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -114,4 +114,4 @@ BIGMAILER_API_KEY = os.getenv('BIGMAILER_API_KEY')
 
 CAMPAIGN_ID = os.getenv('CAMPAIGN_ID')
 
-SESSION_DURATION = datetime.timedelta(days=365)
+SESSION_DURATION = timedelta(days=365)

@@ -29,7 +29,7 @@ class PrivateAPIAuthentication(NoAuthentication):
             request: HttpRequest
     ) -> typing.Tuple[models.User, models.Session]:
         session: models.Session = get_authorized_session(
-            request=request
+            request=request,
         )
 
         return session.user, session
@@ -38,6 +38,7 @@ class PrivateAPIAuthentication(NoAuthentication):
 def get_authorized_session(request: HttpRequest) -> Session:
     token: typing.Union[str, None] = request.COOKIES.get(
         settings.SESSION_COOKIE_NAME)
+
 
     if not token:
         raise AuthorizationFailed()
@@ -51,7 +52,7 @@ def get_authorized_session(request: HttpRequest) -> Session:
                 .get(
                 last_active__gte=timezone.now() - settings.SESSION_DURATION,
                 token=token,
-                is_active=True,
+                is_active=False,
             )
         )
 

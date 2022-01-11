@@ -11,23 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Appointment',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('updated_on', models.DateTimeField(auto_now=True)),
-                ('uid', models.UUIDField(default=uuid.uuid4, unique=True)),
-                ('name', models.CharField(max_length=255)),
-                ('phone_number', models.CharField(max_length=20)),
-                ('date', models.DateTimeField(db_index=True)),
-                ('barber', models.CharField(max_length=255)),
-                ('message', models.TextField(null=True)),
-            ],
-            options={
-                'abstract': False,
-            },
-        ),
         migrations.AddField(
             model_name='user',
             name='is_barber',
