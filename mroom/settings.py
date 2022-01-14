@@ -1,11 +1,8 @@
 import os
+from datetime import timedelta
 from pathlib import Path
-import datetime
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 
 DEBUG = True
 
@@ -22,7 +19,7 @@ INSTALLED_APPS = [
 
     # 3 rd party
     'corsheaders',
-    'rest_framework', 
+    'rest_framework',
     'django_extensions',
     'debug_toolbar',
 
@@ -114,4 +111,4 @@ BIGMAILER_API_KEY = os.getenv('BIGMAILER_API_KEY')
 
 CAMPAIGN_ID = os.getenv('CAMPAIGN_ID')
 
-SESSION_DURATION = datetime.timedelta(days=365)
+SESSION_DURATION = timedelta(days=365)

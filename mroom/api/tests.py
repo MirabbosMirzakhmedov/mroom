@@ -470,6 +470,7 @@ class TestPrivateEndpoint(TestCase):
         )
         session: Session = Session.objects.create(
             user=user,
+            is_active=True,
         )
         client.cookies[
             settings.SESSION_COOKIE_NAME
@@ -493,16 +494,17 @@ class TestPrivateEndpoint(TestCase):
         client: APIClient = APIClient()
         user: User = User.objects.create_user(
             email='new_email@gmail.com',
-            password='new_password',
             name='Mirabbos',
             terms=True,
         )
         session: Session = Session.objects.create(
             user=user,
+            is_active=True,
         )
         client.cookies[
             settings.SESSION_COOKIE_NAME
         ] = session.token
+
         res = client.get(
             path='/api/current_user/',
             content_type='application/json',
@@ -516,19 +518,78 @@ class TestPrivateEndpoint(TestCase):
             2
         )
         self.assertEqual(
-            'uid' and 'name' in res.data,
-            True
+            str(user.uid),
+            res.data['uid']
+        )
+        self.assertEqual(
+            user.name,
+            res.data['name']
+        )
+
+
+class TestBarber(TestCase):
+    def test_get_list_of_barbers(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            name='Alexis',
+            email='alexis_barber@gmail.com',
+            terms=True
+        )
+        user.is_barber = True
+        user.save()
+        res = client.get(
+            path='/api/barber/',
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.json(),
+            [
+                {'uid': str(user.uid),
+                 'name': user.name}
+            ]
+        )
+        self.assertEqual(
+            res.status_code,
+            200
+        )
+
+    def test_unsuccessful(self):
+        client: APIClient = APIClient()
+        user: User = User.objects.create_user(
+            name='Sonia',
+            email='sonia_user@gmail.com',
+            terms=True
+        )
+        user.is_barber = False
+        user.save()
+        res = client.get(
+            path='/api/barber/',
+            content_type='application/json',
+        )
+        self.assertEqual(
+            res.json(),
+            []
+        )
+        self.assertEqual(
+            res.status_code,
+            200
         )
 
 
 class TestAppointment(TestCase):
-
     def test_empty_full_name(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': '',
+            'name': '',
             'phone_number': '+3712008080',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -544,18 +605,24 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': ['This field is required.'],
+                'name': ['This field may not be blank.'],
                 'date': ['Cannot insert date in the past.']
             }
-
         )
 
     def test_empty_phone_number(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': 'Alex Costa',
+            'name': 'John Lewis',
             'phone_number': '',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -571,24 +638,24 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': [
-                    'This field is required.'
-                ],
-                'phone_number': [
-                    'This field may not be blank.'
-                ],
-                'date': [
-                    'Cannot insert date in the past.'
-                ]
+                'phone_number': ['This field may not be blank.'],
+                'date': ['Cannot insert date in the past.']
             }
         )
 
     def test_phone_number_min_length(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': 'Alex Costa',
+            'name': 'Alex Costa',
             'phone_number': '+20030',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -600,9 +667,6 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': [
-                    'This field is required.'
-                ],
                 'phone_number': [
                     'Phone number must be between 9 - 15 '
                     'digits and cannot have blank spaces.'
@@ -619,10 +683,17 @@ class TestAppointment(TestCase):
 
     def test_phone_number_with_spaces(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
         payload: Dict = {
-            'full_name': 'Alex Costa',
+            'name': 'Alex Costa',
             'phone_number': '+371 200 30 700',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
             'date': '2021-10-26T02:17'
         }
@@ -634,16 +705,11 @@ class TestAppointment(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'name': [
-                    'This field is required.'
-                ],
                 'phone_number': [
                     'Phone number must be between 9 - 15 '
                     'digits and cannot have blank spaces.'
                 ],
-                'date': [
-                    'Cannot insert date in the past.'
-                ]
+                'date': ['Cannot insert date in the past.']
             }
         )
         self.assertEqual(
@@ -653,12 +719,24 @@ class TestAppointment(TestCase):
 
     def test_appointment_successful(self):
         client: APIClient = APIClient()
+        barber: User = User.objects.create_user(
+            name='John Lewis',
+            email='john_lewis@gmail.com',
+            terms=True
+        )
+        barber.is_barber = True
+        barber.save()
+
+        appointment_date: str = (
+            timezone.now() + timedelta(days=1)
+        ).strftime('%Y-%m-%dT%H:%M')
+
         payload: Dict = {
             'name': 'Alex Costa',
             'phone_number': '+3712008080',
-            'barber': 'John Lewis',
+            'barber': str(barber.uid),
             'message': 'Your message',
-            'date': '2022-10-27T10:01'
+            'date': appointment_date,
         }
         res = client.post(
             path='/api/appointment/',
@@ -674,8 +752,8 @@ class TestAppointment(TestCase):
             {
                 'name': 'Alex Costa',
                 'phone_number': '+3712008080',
-                'date': '2022-10-27T10:01',
-                'barber': 'John Lewis',
+                'date': appointment_date,
+                'barber': str(barber.uid),
                 'message': 'Your message'
             }
         )

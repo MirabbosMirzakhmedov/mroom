@@ -1,7 +1,6 @@
 from datetime import datetime
-
+from mroom.api.models import User
 from rest_framework import serializers
-
 from mroom.api.models import Appointment
 
 
@@ -50,3 +49,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
     phone_number = PhoneNumberField(
         regex=r'^\+?1?\d{9,15}$',
     )
+    barber = serializers.SlugRelatedField(
+        many=False,
+        slug_field='uid',
+        queryset=User.objects.filter(is_barber=True),
+        required=True
+    )
+

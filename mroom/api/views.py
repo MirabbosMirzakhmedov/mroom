@@ -7,14 +7,15 @@ from django.db.transaction import atomic
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.utils import timezone
-from rest_framework import serializers
-from rest_framework import viewsets
+from rest_framework import serializers, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from mroom import settings
-from mroom.api.authentication.api import PrivateAPIAuthentication
-from mroom.api.authentication.api import get_authorized_session
+from mroom.api.authentication.api import (
+    PrivateAPIAuthentication,
+    get_authorized_session
+)
 from mroom.api.email.campaign import Signup
 from mroom.api.exceptions import (
     ServiceUnavailable,
@@ -26,6 +27,7 @@ from mroom.api.models import (
     Appointment,
 )
 from mroom.api.serializer.appointment import AppointmentSerializer
+from mroom.api.serializer.barber import BarberSerializer
 from mroom.api.serializer.signin import SigninSerializer
 from mroom.api.serializer.signup import SignupSerializer
 from mroom.api.serializer.user import CurrentUserSerializer
@@ -125,7 +127,7 @@ def signin(request: HttpRequest) -> Response:
     ):
         raise AuthenticationFailed()
 
-    session: Session = Session.objects.create(user=user)
+    session: Session = Session.objects.create(user=user, is_active=True)
 
     response: Response = Response()
     response.set_cookie(
@@ -166,6 +168,12 @@ class CurrentUserViewSet(viewsets.ViewSet):
             CurrentUserSerializer(instance=request.user).data
         )
 
+
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+
+
+class BarberViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.filter(is_barber=True)
+    serializer_class = BarberSerializer

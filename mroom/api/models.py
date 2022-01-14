@@ -47,8 +47,10 @@ class User(AbstractBaseUser, ProjectModel):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, null=False, default=str)
     terms = models.BooleanField(default=False)
-
+    is_barber = models.BooleanField(default=False)
     objects = UserManager()
+
+
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -62,16 +64,17 @@ class Session(ProjectModel):
     )
     token = models.TextField(default=gen_session_token, unique=True)
     last_active = models.DateTimeField(auto_now_add=True, db_index=True)
-    is_active = models.BooleanField(default=True)
-
+    is_active = models.BooleanField(default=False)
 
 
 class Appointment(ProjectModel):
     name = models.CharField(max_length=255, null=False)
     phone_number = models.CharField(null=False, max_length=20)
     date = models.DateTimeField(db_index=True)
-    barber = models.CharField(null=False, max_length=255)
     message = models.TextField(null=True)
 
-
-
+    barber = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='appointments'
+    )
