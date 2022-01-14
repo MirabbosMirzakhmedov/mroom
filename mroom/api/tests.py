@@ -470,6 +470,7 @@ class TestPrivateEndpoint(TestCase):
         )
         session: Session = Session.objects.create(
             user=user,
+            is_active=True,
         )
         client.cookies[
             settings.SESSION_COOKIE_NAME
@@ -498,6 +499,7 @@ class TestPrivateEndpoint(TestCase):
         )
         session: Session = Session.objects.create(
             user=user,
+            is_active=True,
         )
         client.cookies[
             settings.SESSION_COOKIE_NAME
@@ -516,8 +518,12 @@ class TestPrivateEndpoint(TestCase):
             2
         )
         self.assertEqual(
-            'uid' and 'name' in res.data,
-            True
+            str(user.uid),
+            res.data['uid']
+        )
+        self.assertEqual(
+            user.name,
+            res.data['name']
         )
 
 
@@ -720,12 +726,17 @@ class TestAppointment(TestCase):
         )
         barber.is_barber = True
         barber.save()
+
+        appointment_date: str = (
+            timezone.now() + timedelta(days=1)
+        ).strftime('%Y-%m-%dT%H:%M')
+
         payload: Dict = {
             'name': 'Alex Costa',
             'phone_number': '+3712008080',
             'barber': str(barber.uid),
             'message': 'Your message',
-            'date': '2022-10-27T10:01'
+            'date': appointment_date,
         }
         res = client.post(
             path='/api/appointment/',
@@ -741,7 +752,7 @@ class TestAppointment(TestCase):
             {
                 'name': 'Alex Costa',
                 'phone_number': '+3712008080',
-                'date': '2022-10-27T10:01',
+                'date': appointment_date,
                 'barber': str(barber.uid),
                 'message': 'Your message'
             }

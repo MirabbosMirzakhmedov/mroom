@@ -127,7 +127,7 @@ def signin(request: HttpRequest) -> Response:
     ):
         raise AuthenticationFailed()
 
-    session: Session = Session.objects.create(user=user)
+    session: Session = Session.objects.create(user=user, is_active=True)
 
     response: Response = Response()
     response.set_cookie(

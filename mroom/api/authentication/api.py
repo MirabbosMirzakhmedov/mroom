@@ -52,7 +52,7 @@ def get_authorized_session(request: HttpRequest) -> Session:
                 .get(
                 last_active__gte=timezone.now() - settings.SESSION_DURATION,
                 token=token,
-                is_active=False,
+                is_active=True,
             )
         )
 

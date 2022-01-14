@@ -1,11 +1,8 @@
 import os
-from pathlib import Path
-import datetime
 from datetime import timedelta
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 
 DEBUG = True
 
@@ -22,7 +19,7 @@ INSTALLED_APPS = [
 
     # 3 rd party
     'corsheaders',
-    'rest_framework', 
+    'rest_framework',
     'django_extensions',
     'debug_toolbar',
 
