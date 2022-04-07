@@ -1,8 +1,9 @@
+import typing
+
 import debug_toolbar
 from django.conf import settings
 from django.urls import path, include
 from rest_framework_nested.routers import SimpleRouter
-import typing
 
 from mroom.api.views import (
     signup,
@@ -12,6 +13,7 @@ from mroom.api.views import (
     BarberViewSet,
     AppointmentViewSet,
 )
+from mroom.report.views import SurveyViewSet
 
 viewsets: typing.List[typing.Dict] = [
     {
@@ -28,6 +30,11 @@ viewsets: typing.List[typing.Dict] = [
         'prefix': r'api/barber',
         'viewset': BarberViewSet,
         'basename': 'barber'
+    },
+    {
+        'prefix': r'api/survey',
+        'viewset': SurveyViewSet,
+        'basename': 'survey'
     }
 ]
 

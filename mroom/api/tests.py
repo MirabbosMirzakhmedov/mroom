@@ -9,7 +9,7 @@ from django.utils import timezone
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
 
-from mroom import settings
+from django.conf import settings
 from mroom.api.models import User, Session
 
 

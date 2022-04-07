@@ -20,7 +20,6 @@ class ProjectModel(TimestampModel):
 
     uid = models.UUIDField(unique=True, null=False, default=uuid.uuid4)
 
-
 class UserManager(BaseUserManager):
     def create_user(
             self,
