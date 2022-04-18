@@ -84,7 +84,13 @@ class Question(ProjectModel):
 
 
 
-class Survey(models.Model):
+class Survey(ProjectModel):
+    DEFAULT = 'default'
+
+    KEYS = (
+        (DEFAULT, 'Default survey'),
+    )
+
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
@@ -95,3 +101,5 @@ class Survey(models.Model):
         to=Question,
         related_name='surveys',
     )
+
+    key = models.CharField(choices=KEYS, max_length=255)

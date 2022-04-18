@@ -8,10 +8,25 @@ from django.test import TestCase
 from django.utils import timezone
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
+from mroom.report.models import Survey
 
 from django.conf import settings
 from mroom.api.models import User, Session
 
+signup_mock = patch.object(
+    target=requests,
+    attribute='post',
+    side_effect=[
+        Mock(
+            **{
+                'status_code': 200,
+                'json.return_value': {
+                    'contact_id': '09540eaf-6ee8-427c-803d-606c5e299bb3'
+                }
+            }
+        )
+    ]
+)
 
 class TestSignup(TestCase):
     def test_invalid_email(self):
@@ -203,25 +218,16 @@ class TestSignup(TestCase):
             'name': 'Mirabbos',
             'terms': True
         }
-        res_mock = patch.object(
-            target=requests,
-            attribute='post',
-            side_effect=[
-                Mock(
-                    **{
-                        'status_code': 200,
-                        'json.return_value': {
-                            'contact_id': '09540eaf-6ee8-427c-803d-606c5e299bb3'
-                        }
-                    }
-                )
-            ]
-        )
-        with res_mock:
+        with signup_mock:
             res = client.post(
                 path='/api/signup/',
                 data=json.dumps(payload),
                 content_type='application/json'
+            )
+            user = User.objects.get(uid=res.json()['uid'])
+            user_survey = Survey.objects.get(
+                key=Survey.DEFAULT,
+                user__isnull=True,
             )
         self.assertEqual(
             res.status_code,
@@ -230,12 +236,17 @@ class TestSignup(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'detail': f'Signup was successful, '
-                          f'registration email was sent to {payload["email"]}'
+                'uid': str(user.uid),
+                'name': user.name
             }
+
         )
         self.assertEqual(
             User.objects.filter(email=payload['email']).exists(),
+            True
+        )
+        self.assertEqual(
+            Survey.objects.filter(uid=user_survey.uid).exists(),
             True
         )
 
@@ -384,6 +395,7 @@ class TestSignin(TestCase):
             res.status_code,
             200
         )
+        breakpoint()
         self.assertEqual(
             settings.SESSION_COOKIE_NAME in res.cookies,
             True
