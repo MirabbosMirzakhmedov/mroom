@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 
 from mroom.api.models import User
 from mroom.api.tests import signup_mock
-from mroom.report.models import Survey
+from mroom.report.models import Survey, Question, Answer
 
 
 class TestSurvey(TestCase):
@@ -48,12 +48,14 @@ class TestSurvey(TestCase):
             path=f'/api/survey/{str(survey.uid)}/',
             content_type='application/json'
         )
+
+        breakpoint()
         self.assertEqual(
             res.json(),
             {
                 "user": {
-                    "uid": str(user.uid),
-                    "name": str(user.name)
+                    "uid": "15848d66-b52a-41a9-a217-fff1d223c0bf",
+                    "name": "Mirabbos"
                 },
                 "questions": [
                     {
@@ -102,7 +104,7 @@ class TestSurvey(TestCase):
                             },
                             {
                                 "name": "3 times a week",
-                                "description": "3_times_a_week",
+                                "description": "3_times_a_wee",
                                 "key": "three_times"
                             }
                         ],
@@ -199,7 +201,7 @@ class TestSurvey(TestCase):
                                 "key": "lemon"
                             },
                             {
-                                "name": "Applying garlic water",
+                                "name": "Applying garlicwater",
                                 "description": "Applying_garlic_water",
                                 "key": "garlic_water"
                             },
