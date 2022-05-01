@@ -225,10 +225,13 @@ class TestSignup(TestCase):
                 content_type='application/json'
             )
             user = User.objects.get(uid=res.json()['uid'])
-            user_survey = Survey.objects.get(
+            survey_exists = Survey.objects.filter(
                 key=Survey.DEFAULT,
-                user__isnull=True,
-            )
+                user__uid=user.uid,
+            ).exists()
+
+            self.assertEqual(survey_exists, True)
+
         self.assertEqual(
             res.status_code,
             201
@@ -243,10 +246,6 @@ class TestSignup(TestCase):
         )
         self.assertEqual(
             User.objects.filter(email=payload['email']).exists(),
-            True
-        )
-        self.assertEqual(
-            Survey.objects.filter(uid=user_survey.uid).exists(),
             True
         )
 
@@ -504,11 +503,19 @@ class TestPrivateEndpoint(TestCase):
 
     def test_get_current_user(self):
         client: APIClient = APIClient()
-        user: User = User.objects.create_user(
-            email='new_email@gmail.com',
-            name='Mirabbos',
-            terms=True,
-        )
+        payload_signup: Dict = {
+            'email': 'mirabbos.dov@gmail.com',
+            'password': '123456789',
+            'name': 'Mirabbos',
+            'terms': True
+        }
+        with signup_mock:
+            res = client.post(
+                path='/api/signup/',
+                data=json.dumps(payload_signup),
+                content_type='application/json'
+            )
+        user = User.objects.get(uid=res.json()['uid'])
         session: Session = Session.objects.create(
             user=user,
             is_active=True,
@@ -516,7 +523,6 @@ class TestPrivateEndpoint(TestCase):
         client.cookies[
             settings.SESSION_COOKIE_NAME
         ] = session.token
-
         res = client.get(
             path='/api/current_user/',
             content_type='application/json',
@@ -527,7 +533,7 @@ class TestPrivateEndpoint(TestCase):
         )
         self.assertEqual(
             len(res.data),
-            2
+            3
         )
         self.assertEqual(
             str(user.uid),
@@ -536,6 +542,10 @@ class TestPrivateEndpoint(TestCase):
         self.assertEqual(
             user.name,
             res.data['name']
+        )
+        self.assertEqual(
+            user.surveys.filter(key='default').exists(),
+            True
         )
 
 
