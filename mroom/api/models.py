@@ -20,6 +20,7 @@ class ProjectModel(TimestampModel):
 
     uid = models.UUIDField(unique=True, null=False, default=uuid.uuid4)
 
+
 class UserManager(BaseUserManager):
     def create_user(
             self,
@@ -49,11 +50,10 @@ class User(AbstractBaseUser, ProjectModel):
     is_barber = models.BooleanField(default=False)
     objects = UserManager()
 
-
-
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
+
 
 class Session(ProjectModel):
     user = models.ForeignKey(

@@ -122,7 +122,6 @@ def signup(request: HttpRequest) -> JsonResponse:
     )
 
 
-
 @api_view(['POST'])
 def signin(request: HttpRequest) -> Response:
     signin_data: typing.Dict = json.loads(request.body)

@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 
 from mroom.api.models import User
 from mroom.api.tests import signup_mock
-from mroom.report.models import Survey, Question, Answer
+from mroom.report.models import Survey
 
 
 class TestSurvey(TestCase):
@@ -48,167 +48,166 @@ class TestSurvey(TestCase):
             path=f'/api/survey/{str(survey.uid)}/',
             content_type='application/json'
         )
-
-        breakpoint()
         self.assertEqual(
             res.json(),
             {
-                "user": {
-                    "uid": "15848d66-b52a-41a9-a217-fff1d223c0bf",
-                    "name": "Mirabbos"
+                'user': {
+                    'uid': str(user.uid),
+                    'name': str(user.name),
+                    'survey_uid': str(survey.uid),
                 },
-                "questions": [
+                'questions': [
                     {
-                        "answers": [
+                        'answers': [
                             {
-                                "name": "Very short",
-                                "description": "Very_short",
-                                "key": "very_short"
+                                'name': 'Very short',
+                                'description': 'Very_short',
+                                'key': 'very_short'
                             },
                             {
-                                "name": "Short",
-                                "description": "Short",
-                                "key": "short"
+                                'name': 'Short',
+                                'description': 'Short',
+                                'key': 'short'
                             },
                             {
-                                "name": "Medium",
-                                "description": "Medium",
-                                "key": "medium"
+                                'name': 'Medium',
+                                'description': 'Medium',
+                                'key': 'medium'
                             },
                             {
-                                "name": "Long",
-                                "description": "Long",
-                                "key": "long"
+                                'name': 'Long',
+                                'description': 'Long',
+                                'key': 'long'
                             }
                         ],
-                        "solutions": [
+                        'solutions': [
 
                         ]
                     },
                     {
-                        "answers": [
+                        'answers': [
                             {
-                                "name": "Everyday",
-                                "description": "Everyday",
-                                "key": "everyday"
+                                'name': 'Everyday',
+                                'description': 'Everyday',
+                                'key': 'everyday'
                             },
                             {
-                                "name": "2 times a week",
-                                "description": "2_times_a_week",
-                                "key": "two_times"
+                                'name': '2 times a week',
+                                'description': '2_times_a_week',
+                                'key': 'two_times'
                             },
                             {
-                                "name": "1 time a week",
-                                "description": "1_time_a_week",
-                                "key": "one_time"
+                                'name': '1 time a week',
+                                'description': '1_time_a_week',
+                                'key': 'one_time'
                             },
                             {
-                                "name": "3 times a week",
-                                "description": "3_times_a_wee",
-                                "key": "three_times"
+                                'name': '3 times a week',
+                                'description': '3_times_a_wee',
+                                'key': 'three_times'
                             }
                         ],
-                        "solutions": [
+                        'solutions': [
 
                         ]
                     },
                     {
-                        "answers": [
+                        'answers': [
                             {
-                                "name": "Dandruff",
-                                "description": "Dandruff",
-                                "key": "dandruff"
+                                'name': 'Dandruff',
+                                'description': 'Dandruff',
+                                'key': 'dandruff'
                             },
                             {
-                                "name": "Hair loss",
-                                "description": "Hair_loss",
-                                "key": "hair_loss"
+                                'name': 'Hair loss',
+                                'description': 'Hair_loss',
+                                'key': 'hair_loss'
                             },
                             {
-                                "name": "Dry hair",
-                                "description": "Dry_hair",
-                                "key": "dry_hair"
+                                'name': 'Dry hair',
+                                'description': 'Dry_hair',
+                                'key': 'dry_hair'
                             },
                             {
-                                "name": "Psoriasis",
-                                "description": "Psoriasis",
-                                "key": "psoriasis"
+                                'name': 'Psoriasis',
+                                'description': 'Psoriasis',
+                                'key': 'psoriasis'
                             },
                             {
-                                "name": "Head lice",
-                                "description": "Head_lice",
-                                "key": "head_lice"
+                                'name': 'Head lice',
+                                'description': 'Head_lice',
+                                'key': 'head_lice'
                             },
                             {
-                                "name": "Bamboo hair",
-                                "description": "Bamboo_hair",
-                                "key": "bamboo_hair"
+                                'name': 'Bamboo hair',
+                                'description': 'Bamboo_hair',
+                                'key': 'bamboo_hair'
                             },
                             {
-                                "name": "Very oily hair",
-                                "description": "Very_oily_hair",
-                                "key": "very_oily"
+                                'name': 'Very oily hair',
+                                'description': 'Very_oily_hair',
+                                'key': 'very_oily'
                             }
                         ],
-                        "solutions": [
+                        'solutions': [
 
                         ]
                     },
                     {
-                        "answers": [
+                        'answers': [
                             {
-                                "name": "EUR",
-                                "description": "EUR",
-                                "key": "eur"
+                                'name': 'EUR',
+                                'description': 'EUR',
+                                'key': 'eur'
                             },
                             {
-                                "name": "USD",
-                                "description": "USD",
-                                "key": "usd"
+                                'name': 'USD',
+                                'description': 'USD',
+                                'key': 'usd'
                             }
                         ],
-                        "solutions": [
+                        'solutions': [
 
                         ]
                     },
                     {
-                        "answers": [
+                        'answers': [
                             {
-                                "name": "Yes",
-                                "description": "Yes",
-                                "key": "yes"
+                                'name': 'Yes',
+                                'description': 'Yes',
+                                'key': 'yes'
                             },
                             {
-                                "name": "No",
-                                "description": "No",
-                                "key": "no"
+                                'name': 'No',
+                                'description': 'No',
+                                'key': 'no'
                             },
                             {
-                                "name": "I don't know",
-                                "description": "I don't know",
-                                "key": "idk"
+                                'name': "I don't know",
+                                'description': "I don't know",
+                                'key': 'idk'
                             }
                         ],
-                        "solutions": [
+                        'solutions': [
                             {
-                                "name": "Applying aloe liquid",
-                                "description": "Applying_aloe_liquid",
-                                "key": "aloe_liquid"
+                                'name': 'Applying aloe liquid',
+                                'description': 'Applying_aloe_liquid',
+                                'key': 'aloe_liquid'
                             },
                             {
-                                "name": "Applying lemon",
-                                "description": "Applying_lemon",
-                                "key": "lemon"
+                                'name': 'Applying lemon',
+                                'description': 'Applying_lemon',
+                                'key': 'lemon'
                             },
                             {
-                                "name": "Applying garlicwater",
-                                "description": "Applying_garlic_water",
-                                "key": "garlic_water"
+                                'name': 'Applying garlic water',
+                                'description': 'Applying_garlic_water',
+                                'key': 'garlic_water'
                             },
                             {
-                                "name": "Do not washing",
-                                "description": "Do_not_washing",
-                                "key": "not_washing"
+                                'name': 'Do not washing',
+                                'description': 'Do_not_washing',
+                                'key': 'not_washing'
                             }
                         ]
                     }

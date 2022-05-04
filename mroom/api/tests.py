@@ -4,14 +4,14 @@ from typing import Dict, List
 from unittest.mock import patch, Mock
 
 import requests
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
-from mroom.report.models import Survey
 
-from django.conf import settings
 from mroom.api.models import User, Session
+from mroom.report.models import Survey
 
 signup_mock = patch.object(
     target=requests,
@@ -27,6 +27,7 @@ signup_mock = patch.object(
         )
     ]
 )
+
 
 class TestSignup(TestCase):
     def test_invalid_email(self):
@@ -229,9 +230,7 @@ class TestSignup(TestCase):
                 key=Survey.DEFAULT,
                 user__uid=user.uid,
             ).exists()
-
-            self.assertEqual(survey_exists, True)
-
+        self.assertEqual(survey_exists, True)
         self.assertEqual(
             res.status_code,
             201
@@ -240,7 +239,8 @@ class TestSignup(TestCase):
             res.json(),
             {
                 'uid': str(user.uid),
-                'name': user.name
+                'name': user.name,
+                'survey_uid': str(user.surveys.get(key=Survey.DEFAULT).uid)
             }
 
         )
@@ -394,7 +394,6 @@ class TestSignin(TestCase):
             res.status_code,
             200
         )
-        breakpoint()
         self.assertEqual(
             settings.SESSION_COOKIE_NAME in res.cookies,
             True
@@ -543,9 +542,8 @@ class TestPrivateEndpoint(TestCase):
             user.name,
             res.data['name']
         )
-        self.assertEqual(
-            user.surveys.filter(key='default').exists(),
-            True
+        self.assertIsNotNone(
+            res.data['survey_uid']
         )
 
 
@@ -750,7 +748,7 @@ class TestAppointment(TestCase):
         barber.save()
 
         appointment_date: str = (
-            timezone.now() + timedelta(days=1)
+                timezone.now() + timedelta(days=1)
         ).strftime('%Y-%m-%dT%H:%M')
 
         payload: Dict = {

@@ -1,4 +1,5 @@
 from django.db import models
+
 from mroom.api.models import (
     ProjectModel,
     User
@@ -42,7 +43,6 @@ class Answer(ProjectModel):
 
     CHOICE_NO = 'no'
 
-
     KEYS = (
         (VERY_SHORT, 'Very short'),
         (EVERYDAY, 'Everyday'),
@@ -80,8 +80,6 @@ class Question(ProjectModel):
         to=Answer,
         related_name='questions_set',
     )
-
-
 
 
 class Survey(ProjectModel):
