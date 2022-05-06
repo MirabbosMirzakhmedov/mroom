@@ -4,6 +4,7 @@ from typing import Dict, List
 from unittest.mock import patch, Mock
 
 import requests
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from requests.exceptions import HTTPError
