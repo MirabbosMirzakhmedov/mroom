@@ -1,9 +1,8 @@
-import typing
-
 import debug_toolbar
 from django.conf import settings
 from django.urls import path, include
 from rest_framework_nested.routers import SimpleRouter
+import typing
 
 from mroom.api.views import (
     signup,

@@ -54,7 +54,6 @@ class User(AbstractBaseUser, ProjectModel):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-
 class Session(ProjectModel):
     user = models.ForeignKey(
         to=User,

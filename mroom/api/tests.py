@@ -4,7 +4,6 @@ from typing import Dict, List
 from unittest.mock import patch, Mock
 
 import requests
-from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from requests.exceptions import HTTPError
@@ -242,7 +241,6 @@ class TestSignup(TestCase):
                 'name': user.name,
                 'survey_uid': str(user.surveys.get(key=Survey.DEFAULT).uid)
             }
-
         )
         self.assertEqual(
             User.objects.filter(email=payload['email']).exists(),
@@ -522,6 +520,7 @@ class TestPrivateEndpoint(TestCase):
         client.cookies[
             settings.SESSION_COOKIE_NAME
         ] = session.token
+
         res = client.get(
             path='/api/current_user/',
             content_type='application/json',
@@ -597,6 +596,7 @@ class TestBarber(TestCase):
 
 
 class TestAppointment(TestCase):
+
     def test_empty_full_name(self):
         client: APIClient = APIClient()
         barber: User = User.objects.create_user(
@@ -748,7 +748,7 @@ class TestAppointment(TestCase):
         barber.save()
 
         appointment_date: str = (
-                timezone.now() + timedelta(days=1)
+            timezone.now() + timedelta(days=1)
         ).strftime('%Y-%m-%dT%H:%M')
 
         payload: Dict = {
