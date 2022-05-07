@@ -50,8 +50,6 @@ class User(AbstractBaseUser, ProjectModel):
     is_barber = models.BooleanField(default=False)
     objects = UserManager()
 
-
-
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []

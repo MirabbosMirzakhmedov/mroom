@@ -1,5 +1,6 @@
 import json
 import typing
+import uuid
 
 import requests
 from django.db.models import QuerySet
@@ -31,6 +32,7 @@ from mroom.api.serializer.barber import BarberSerializer
 from mroom.api.serializer.signin import SigninSerializer
 from mroom.api.serializer.signup import SignupSerializer
 from mroom.api.serializer.user import CurrentUserSerializer
+from mroom.report.models import Survey
 
 
 @api_view(['POST'])
@@ -72,6 +74,24 @@ def signup(request: HttpRequest) -> JsonResponse:
         name=serializer.data.get('name'),
         terms=serializer.data.get('terms')
     )
+    user_survey = Survey.objects.get(
+        key=Survey.DEFAULT,
+        user__isnull=True,
+    )
+
+    user_survey.pk = None
+    user_survey.id = None
+    user_survey.uid = uuid.uuid4()
+    user_survey.user = user
+    user_survey.save()
+
+    default_survey = Survey.objects.get(
+        key=Survey.DEFAULT,
+        user__isnull=True,
+    )
+
+    for question in default_survey.questions.all():
+        user_survey.questions.add(question)
 
     try:
         response: requests.Response = requests.post(
@@ -96,13 +116,9 @@ def signup(request: HttpRequest) -> JsonResponse:
 
     if not sent:
         raise ServiceUnavailable()
-
     return JsonResponse(
         status=201,
-        data={
-            'detail': f'Signup was successful, '
-                      f'registration email was sent to {user.email}'
-        }
+        data=CurrentUserSerializer(instance=user).data
     )
 
 
@@ -138,7 +154,6 @@ def signin(request: HttpRequest) -> Response:
         httponly=True,
         samesite='Strict'
     )
-
     return response
 
 

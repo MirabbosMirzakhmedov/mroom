@@ -12,6 +12,7 @@ from mroom.api.views import (
     BarberViewSet,
     AppointmentViewSet,
 )
+from mroom.report.views import SurveyViewSet
 
 viewsets: typing.List[typing.Dict] = [
     {
@@ -28,6 +29,11 @@ viewsets: typing.List[typing.Dict] = [
         'prefix': r'api/barber',
         'viewset': BarberViewSet,
         'basename': 'barber'
+    },
+    {
+        'prefix': r'api/survey',
+        'viewset': SurveyViewSet,
+        'basename': 'survey'
     }
 ]
 

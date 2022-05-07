@@ -4,13 +4,29 @@ from typing import Dict, List
 from unittest.mock import patch, Mock
 
 import requests
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 from requests.exceptions import HTTPError
 from rest_framework.test import APIClient
 
-from mroom import settings
 from mroom.api.models import User, Session
+from mroom.report.models import Survey
+
+signup_mock = patch.object(
+    target=requests,
+    attribute='post',
+    side_effect=[
+        Mock(
+            **{
+                'status_code': 200,
+                'json.return_value': {
+                    'contact_id': '09540eaf-6ee8-427c-803d-606c5e299bb3'
+                }
+            }
+        )
+    ]
+)
 
 
 class TestSignup(TestCase):
@@ -203,26 +219,18 @@ class TestSignup(TestCase):
             'name': 'Mirabbos',
             'terms': True
         }
-        res_mock = patch.object(
-            target=requests,
-            attribute='post',
-            side_effect=[
-                Mock(
-                    **{
-                        'status_code': 200,
-                        'json.return_value': {
-                            'contact_id': '09540eaf-6ee8-427c-803d-606c5e299bb3'
-                        }
-                    }
-                )
-            ]
-        )
-        with res_mock:
+        with signup_mock:
             res = client.post(
                 path='/api/signup/',
                 data=json.dumps(payload),
                 content_type='application/json'
             )
+            user = User.objects.get(uid=res.json()['uid'])
+            survey_exists = Survey.objects.filter(
+                key=Survey.DEFAULT,
+                user__uid=user.uid,
+            ).exists()
+        self.assertEqual(survey_exists, True)
         self.assertEqual(
             res.status_code,
             201
@@ -230,8 +238,9 @@ class TestSignup(TestCase):
         self.assertEqual(
             res.json(),
             {
-                'detail': f'Signup was successful, '
-                          f'registration email was sent to {payload["email"]}'
+                'uid': str(user.uid),
+                'name': user.name,
+                'survey_uid': str(user.surveys.get(key=Survey.DEFAULT).uid)
             }
         )
         self.assertEqual(
@@ -492,11 +501,19 @@ class TestPrivateEndpoint(TestCase):
 
     def test_get_current_user(self):
         client: APIClient = APIClient()
-        user: User = User.objects.create_user(
-            email='new_email@gmail.com',
-            name='Mirabbos',
-            terms=True,
-        )
+        payload_signup: Dict = {
+            'email': 'mirabbos.dov@gmail.com',
+            'password': '123456789',
+            'name': 'Mirabbos',
+            'terms': True
+        }
+        with signup_mock:
+            res = client.post(
+                path='/api/signup/',
+                data=json.dumps(payload_signup),
+                content_type='application/json'
+            )
+        user = User.objects.get(uid=res.json()['uid'])
         session: Session = Session.objects.create(
             user=user,
             is_active=True,
@@ -515,7 +532,7 @@ class TestPrivateEndpoint(TestCase):
         )
         self.assertEqual(
             len(res.data),
-            2
+            3
         )
         self.assertEqual(
             str(user.uid),
@@ -524,6 +541,9 @@ class TestPrivateEndpoint(TestCase):
         self.assertEqual(
             user.name,
             res.data['name']
+        )
+        self.assertIsNotNone(
+            res.data['survey_uid']
         )
 
 
@@ -577,6 +597,7 @@ class TestBarber(TestCase):
 
 
 class TestAppointment(TestCase):
+
     def test_empty_full_name(self):
         client: APIClient = APIClient()
         barber: User = User.objects.create_user(

@@ -1,10 +1,9 @@
 from django.core.management import base
-from datetime import datetime
-from django.utils import timezone
 
+from mroom.report.models import Question, Answer, Survey
 
 
 class Command(base.BaseCommand):
 
     def handle(self, *args, **options):
-        print('run playground')
+        print('This is a playground')

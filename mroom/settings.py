@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     # Projects
-    'mroom.api'
+    'mroom.api',
+    'mroom.report',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
