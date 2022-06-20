@@ -64,14 +64,28 @@ class Answer(ProjectModel):
         (CHOICE_YES_NOT_WASHING, 'Do not washing')
     )
 
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True)
 
     key = models.CharField(choices=KEYS, max_length=128)
 
 
 class Question(ProjectModel):
-    name = models.CharField(max_length=255)
+    HOW_LONG_HAIR = 'how_long_hair'  # 2022-06-20 09:01:16.498557+00:00
+    HOW_OFTEN_WASH = 'how_often_wash'  # 2022-06-20 09:01:16.498557+00:00
+    PROBLEMS_YOU_HAVE = 'problems_you_have'  # 2022-06-20 09:01:16.498557+00:00
+    SHAMPOO_PRICE = 'shampoo_price'  # 2022-06-20 09:01:16.498557+00:00
+    SOLUTIONS_AT_HOME = 'solutions_at_home'  # 2022-06-20 09:01:16.498557+00:00
+
+    KEYS = (
+        (HOW_LONG_HAIR, 'How long hair do you have?'),
+        (HOW_OFTEN_WASH, 'How often do you wash your hair?'),
+        (PROBLEMS_YOU_HAVE, 'What kind of problems do you have?'),
+        (SHAMPOO_PRICE, 'What is the price for your shampoo?'),
+        (SOLUTIONS_AT_HOME, 'Solutions you can do at home')
+    )
+
+    name = models.CharField(max_length=255, blank=True)
     answers = models.ManyToManyField(
         to=Answer,
         related_name='questions',
@@ -80,6 +94,7 @@ class Question(ProjectModel):
         to=Answer,
         related_name='questions_set',
     )
+    key = models.TextField(choices=KEYS)
 
 
 class Survey(ProjectModel):
@@ -101,3 +116,16 @@ class Survey(ProjectModel):
     )
 
     key = models.CharField(choices=KEYS, max_length=255)
+
+
+class Report(ProjectModel):
+    survey = models.ForeignKey(
+        to=Survey,
+        related_name='reports',
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        null=False
+    )

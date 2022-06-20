@@ -39,22 +39,27 @@ survey = Survey(
     answers={
         'Q1_answer': 'Very short',
         'Q2_answer': 'Everyday',
-        'Q3_answer': ['Dandruff', 'Hair loss', 'Dry hair',
-                      'Psoriasis', 'Head lice', 'Bamboo hair',
-                      'Very oily hair'],
+        'Q3_answer': [
+            # 'Dandruff', 'Hair loss', 'Dry hair',
+            # 'Psoriasis', 'Head lice', 'Bamboo hair',
+            'Very oily hair'
+        ],
         'Q4_answer': {
             'price': 120,
             'currency': 'Eur',
         },
         'Q5_answer': {
             'choice': 'Yes',
-            'yes_choices': ['Applying Aloe liquid', 'Applying lemon',
-                            'Applying garlic water', 'Do not washing']
+            'yes_choices': [
+                # 'Applying Aloe liquid', 'Applying lemon',
+                # 'Applying garlic water',
+                'Do not washing'
+            ]
         },
     }
 )
 
 report = Report(survey=survey)
 report_text: str = report.get()
-
+# breakpoint()
 print(report_text)

@@ -218,3 +218,21 @@ class TestSurvey(TestCase):
             res.status_code,
             200
         )
+
+
+class TestReports(TestCase):
+    def test_post_single_report(self):
+        client: APIClient = APIClient()
+        payload: Dict = {
+            'email': 'mirabbos.dov@gmail.com',
+            'password': '123456789',
+            'name': 'Mirabbos',
+            'terms': True
+        }
+        res = client.post(
+            path='/api/reports/',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+
+

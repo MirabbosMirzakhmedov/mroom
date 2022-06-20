@@ -1,0 +1,56 @@
+{
+  "survey": {
+    "user": {
+      "uid": "956e15a9-60d9-409b-b882-a7b950f31dc9",
+      "name": "Mirabbos"
+    },
+    "questions": [
+        {
+          "answers": [
+            {
+              "key": "very_short"
+            }
+          ]
+        },
+        {
+          "answers": [
+            {
+              "key": "everyday"
+            }
+          ]
+        },
+        {
+          "answers": [
+            {
+              "key": "dandruff"
+            },
+            {
+              "key": "hair_loss"
+            }
+          ]
+        },
+        {
+          "answers": [
+            {
+              "key": "eur"
+            }
+          ]
+        },
+        {
+          "answers": [
+            {
+              "key": "yes"
+            }
+          ],
+          "solutions": [
+            {
+              "key": "aloe_liquid"
+            },
+            {
+              "key": "not_washing"
+            }
+          ]
+        }
+    ]
+  }
+}
